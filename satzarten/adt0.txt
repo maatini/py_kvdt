@@ -1,0 +1,27 @@
+# Aufbau: Feldkennung, Kardinalität, Muss/Kann, Regel, Feldbezeichnung
+
+8000  1  M Satzart
+0105  1  M KBV-Prüfnummer 
+9102  1  M Empfänger
+9212  1  M Version
+0102  1  M Softwareverantwortliche
+0121  1  M Straße
+0122  1  M PLZ
+0123  1  M Ort
+0124  1  M Telefonnummer
+0125  1  K Telefaxnummer
+0111  1  K Email
+0126  1  M Regionaler_Systembetreuer
+0127  1  M Straße_SB
+0128  1  M PLZ_SB
+0129  1  M Ort_SB
+0130  1  M Telefonnummer_SB
+0131  1  K Telefaxnummer_SB   
+0103  1  M Software  M
+0132  1  K Release
+9115  1  K Erstellungsdatum
+9260  1  K Anzahl_Teilabrechnungen
+9261    1  m Abrechnungsteil_x_von_y
+9204  1  M Abrechnungsquartal
+9250  n  K AVWG_Prüfnummer
+

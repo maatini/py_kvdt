@@ -1,0 +1,7 @@
+# Aufbau: Feldkennung, Kardinalität, Muss/Kann, Regel, Feldbezeichnung
+
+8000  1  M Satzart
+9103  1  M Erstellungsdatum
+9106  1  M Zeichensatz
+9132   n M Datenpakete
+
