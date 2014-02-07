@@ -1,31 +1,25 @@
 __author__ = 'Martin'
 
+from my_token import Token
+
 class KVDT_Reader:
     """
     Liest den Inhalt einer KVDT-Datei und erzeugt daraus eine Liste
-    von Wertenpaaren <Feldkennung, Feldwert>
+    von Token
     """
 
-    def __init__(self, file_name):
-        self.file_name_ = file_name
-        self.tuples_ = []
-        self.pos_ = 0
-        f = open(file_name, "r")
+    def __init__(self):
+        self.tokens_ = []
+
+    def tokenize(self, filespec):
+        f = open(filespec, "r")
         for line in f.readlines():
-            self.tuples_.append([line[3:7], line[7:len(line)-1]])
+            self.tokens_.append(Token(line[3:7], line[7:-1]))
         f.close()
-
-    def tuples(self):
-        return self.tuples_
-
-    def advance(self):
-        if self.pos_ < len(self.tuples_):
-            self.pos_ += 1
-        return self.current_tuple()
-
-    def current_tuple(self):
-        return self.tuples_[self.pos_] if self.pos_ < len(self.tuples_) else None
+        return self.tokens_
 
 
-
+def scan(filespec):
+    scanner = KVDT_Reader()
+    return scanner.tokenize(filespec)
 
