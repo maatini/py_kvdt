@@ -4,7 +4,7 @@
 3000  1  K Patientennummer
 3003  1  K Schein_ID
 3004  1  m R306 KartentypRegel
-3006  1  m CDM R397 Version
+3006  1  m R397 Version
 3100  1  K Namenszusatz
 3101  1  M Name
 3102  1  M Vorname
@@ -36,7 +36,7 @@
 4125  1  K Gültigkeitszeitraum
 4126  n  K SKT_Bemerkungen
 4202  1  K Unfall
-4239  1  M Scheinuntergruppe  M
+4239  1  M Scheinuntergruppe
 4243  1  M Weiterbehandelnder_Arzt
 
 5000  n  M Leistungstag
@@ -75,12 +75,14 @@
 5073  n  m R773 Art_der_Erkrankung
 5098      1  M BSNR
 5099      1  M LANR 
-6001  n  m R486 ICD_Code
+
+6001  n  m R486 R488 R489 R761 R490 R491 R492 R728 R729 ICD_Code
 6003    1  m R484 Diagnosensicherheit
 6004    1  k Seitenlokalisation
 6006    n  k Diagnosenerläuterung
 6008    n  m R491 Diagnosenausnahmetatbestand
-3673  n  m R486 Dauerdiagnose
+
+3673  n  m R486 R488 R489 R761 R490 R491 R492 R728 R729 Dauerdiagnose
 3674    1  m Diagnosensicherheit
 3675    1  k Seitenlokalisation
 3676    n  k Diagnosenerläuterung

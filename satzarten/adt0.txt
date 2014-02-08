@@ -17,7 +17,7 @@
 0129  1  M Ort_SB
 0130  1  M Telefonnummer_SB
 0131  1  K Telefaxnummer_SB   
-0103  1  M Software  M
+0103  1  M Software
 0132  1  K Release
 9115  1  K Erstellungsdatum
 9260  1  K Anzahl_Teilabrechnungen
