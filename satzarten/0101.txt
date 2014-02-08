@@ -45,7 +45,8 @@
 4245        1  m Anzahl_bewilligter_Leistungen   
 4246        1  m Anzahl_abgerechneter_Leistungen
 4236  1  K Abklärung_somatischer_Ursachen
-4239  1  M Scheinuntergruppe  M
+4239  1  M Scheinuntergruppe
+
 5000  n  M Leistungstag
 5001    n  m GNR
 5002      1  k Art_der_Untersuchung
@@ -88,6 +89,7 @@
 6004    1  k Seitenlokalisation
 6006    n  k Diagnosenerläuterung
 6008    n  m R491 Diagnosenausnahmetatbestand
+
 3673  n  m R486 R488 R489 R761 R490 R491 R492 R728 R729 Dauerdiagnose
 3674    1  m Diagnosensicherheit
 3675    1  k Seitenlokalisation

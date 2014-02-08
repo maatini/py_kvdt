@@ -7,6 +7,7 @@ import kvdt_reader
 import kvdt_feld_stm
 
 
+
 def check_kvdt_felder(tokens):
     err_cnt = 0
     for t in tokens:
@@ -131,11 +132,17 @@ def parse(tokens):
         raise Exception('8000/adt0 erwartet:'+tokens[current])
 
 
-reader = kvdt_reader.KVDT_Reader()
-tokens = kvdt_reader.scan(r'H:\work\kvdt_filter\Z05123456699_30.06.2013_12.00.CON')
+def parse_demo():
+    reader = kvdt_reader.KVDT_Reader()
+    tokens = kvdt_reader.scan(r'H:\work\kvdt_filter\Z05123456699_30.06.2013_12.00.CON')
 
-check_kvdt_felder(tokens)
-print len(tokens), "Felder gelesen"
+    check_kvdt_felder(tokens)
+    print len(tokens), "Felder gelesen"
 
-parse(tokens)
+    parse(tokens)
+
+from satz_stm import KVDT_Stamm
+
+DIRPATH = r'H:\work\kvdt_filter\src\satzarten'
+stm = KVDT_Stamm(DIRPATH)
 
