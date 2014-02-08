@@ -8,6 +8,79 @@ MUSSKANN = 3
 REGELN = 4
 SUBFELDER = 5
 
+
+con0 = [
+    ["8000", "con0", 1, "m",  [], []],
+    ["9103", "Erstellungsdatum", 1, "m",  [], []],
+    ["9106", "Zeichensatz", 1, "m",  [], [
+        ["9132", "Datenpakete", -1, "m",  [], []]]
+    ]
+]
+
+con9 = [["8000", "con9", 1, "m",  [], []]]
+
+besa = [
+    ["8000", "besa", 1, "m",  [], []],
+    ["0201", "BSNR", -1, "m",  [], []],
+    ["0203", "Bezeichnung", 1, "m",  [], []],
+    ["0212", "LANR", -1, "m",  [], [
+        ["0219", "Titel", 1, "k",  [], []],
+        ["0220", "Arztvorname", 1, "k",  [], []],
+        ["0221", "Namenszusatz", 1, "k",  [], []],
+        ["0211", "Arztname", 1, "m",  ["R719"], []]]
+    ],
+    ["0205", "Straße", 1, "m",  [], []],
+    ["0215", "PLZ", 1, "m",  [], []],
+    ["0216", "Ort", 1, "m",  [], []],
+    ["0208", "Telefonnummer", 1, "m",  [], []],
+    ["0209", "Telefaxnummer", 1, "k",  [], []],
+    ["0218", "EMail", 1, "k",  [], []]
+]
+
+rvsa = [
+    ["8000", "rvsa", 1, "m",  ["R743"], []],
+    ["0201", "BSNR", -1, "m",  [],
+        [["0300", "Laborleistungen", 1, "m",  [],
+            [["0301", "Analysen", 1, "m",  ["R740"], [
+                    ["0302", "Gerätetyp", -1, "m",  ["R741"], [
+                        ["0303", "Hersteller", 1, "m",  [], []]]]]],
+            ["0304", "Analyt_ID", -1, "m",  ["R740"], [
+                    ["0305", "RV_Zertifikat", 1, "m",  [], []]]]]]
+        ]
+    ]
+]
+
+adt0 = [
+    ["8000", "Satzart", 1, "m",  [], []],
+    ["0105", "KBV-Prüfnummer", 1, "m",  [], []],
+    ["9102", "Empfänger", 1, "m",  [], []],
+    ["9212", "Version", 1, "m",  [], []],
+    ["0102", "Softwareverantwortliche", 1, "m",  [], []],
+    ["0121", "Straße", 1, "m",  [], []],
+    ["0122", "PLZ", 1, "m",  [], []],
+    ["0123", "Ort", 1, "m",  [], []],
+    ["0124", "Telefonnummer", 1, "m",  [], []],
+    ["0125", "Telefaxnummer", 1, "k",  [], []],
+    ["0111", "Email", 1, "k",  [], []],
+    ["0126", "Regionaler_Systembetreuer", 1, "m",  [], []],
+    ["0127", "Straße_SB", 1, "m",  [], []],
+    ["0128", "PLZ_SB", 1, "m",  [], []],
+    ["0129", "Ort_SB", 1, "m",  [], []],
+    ["0130", "Telefonnummer_SB", 1, "m",  [], []],
+    ["0131", "Telefaxnummer_SB", 1, "k",  [], []],
+    ["0103", "Software", 1, "m",  [], []],
+    ["0132", "Release", 1, "k",  [], []],
+    ["9115", "Erstellungsdatum", 1, "k",  [], []],
+    ["9260", "Anzahl_Teilabrechnungen", 1, "k",  [], [
+        ["9261", "Abrechnungsteil_x_von_y", 1, "m",  [], []]]
+    ],
+    ["9204", "Abrechnungsquartal", 1, "m",  [], []],
+    ["9250", "AVWG_Prüfnummer", -1, "k",  [], []]
+]
+
+
+adt9 = [["8000", "adt9", 1, "m",  [], []]]
+
 s0101 = [
     ["8000", "0101", 1, "m",  [], []],
     ["3000", "Patientennummer", 1, "k",  [], []],
@@ -449,78 +522,6 @@ s0104 = [
         ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
         ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
     ]]
-]
-
-adt0 = [
-    ["8000", "Satzart", 1, "m",  [], []],
-    ["0105", "KBV-Prüfnummer", 1, "m",  [], []],
-    ["9102", "Empfänger", 1, "m",  [], []],
-    ["9212", "Version", 1, "m",  [], []],
-    ["0102", "Softwareverantwortliche", 1, "m",  [], []],
-    ["0121", "Straße", 1, "m",  [], []],
-    ["0122", "PLZ", 1, "m",  [], []],
-    ["0123", "Ort", 1, "m",  [], []],
-    ["0124", "Telefonnummer", 1, "m",  [], []],
-    ["0125", "Telefaxnummer", 1, "k",  [], []],
-    ["0111", "Email", 1, "k",  [], []],
-    ["0126", "Regionaler_Systembetreuer", 1, "m",  [], []],
-    ["0127", "Straße_SB", 1, "m",  [], []],
-    ["0128", "PLZ_SB", 1, "m",  [], []],
-    ["0129", "Ort_SB", 1, "m",  [], []],
-    ["0130", "Telefonnummer_SB", 1, "m",  [], []],
-    ["0131", "Telefaxnummer_SB", 1, "k",  [], []],
-    ["0103", "Software", 1, "m",  [], []],
-    ["0132", "Release", 1, "k",  [], []],
-    ["9115", "Erstellungsdatum", 1, "k",  [], []],
-    ["9260", "Anzahl_Teilabrechnungen", 1, "k",  [], [
-        ["9261", "Abrechnungsteil_x_von_y", 1, "m",  [], []]]
-    ],
-    ["9204", "Abrechnungsquartal", 1, "m",  [], []],
-    ["9250", "AVWG_Prüfnummer", -1, "k",  [], []]
-]
-
-
-adt9 = ["8000", "adt9", 1, "m",  [], []]
-
-besa = [
-    ["8000", "besa", 1, "m",  [], []],
-    ["0201", "BSNR", -1, "m",  [], []],
-    ["0203", "Bezeichnung", 1, "m",  [], []],
-    ["0212", "LANR", -1, "m",  [], [
-        ["0219", "Titel", 1, "k",  [], []],
-        ["0220", "Arztvorname", 1, "k",  [], []],
-        ["0221", "Namenszusatz", 1, "k",  [], []],
-        ["0211", "Arztname", 1, "m",  ["R719"], []]]
-    ],
-    ["0205", "Straße", 1, "m",  [], []],
-    ["0215", "PLZ", 1, "m",  [], []],
-    ["0216", "Ort", 1, "m",  [], []],
-    ["0208", "Telefonnummer", 1, "m",  [], []],
-    ["0209", "Telefaxnummer", 1, "k",  [], []],
-    ["0218", "EMail", 1, "k",  [], []]
-]
-
-con0 = [
-    ["8000", "con0", 1, "m",  [], []],
-    ["9103", "Erstellungsdatum", 1, "m",  [], []],
-    ["9106", "Zeichensatz", 1, "m",  [], [
-        ["9132", "Datenpakete", -1, "m",  [], []]]
-    ]
-]
-
-con9 = ["8000", "con9", 1, "m",  [], []]
-
-rvsa = [
-    ["8000", "rvsa", 1, "m",  ["R743"], []],
-    ["0201", "BSNR", -1, "m",  [],
-        [["0300", "Laborleistungen", 1, "m",  [],
-            [["0301", "Analysen", 1, "m",  ["R740"], [
-                    ["0302", "Gerätetyp", -1, "m",  ["R741"], [
-                        ["0303", "Hersteller", 1, "m",  [], []]]]]],
-            ["0304", "Analyt_ID", -1, "m",  ["R740"], [
-                    ["0305", "RV_Zertifikat", 1, "m",  [], []]]]]]
-        ]
-    ]
 ]
 
 

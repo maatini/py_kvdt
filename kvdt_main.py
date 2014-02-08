@@ -7,6 +7,7 @@ import re
 import kvdt_reader
 import kvdt_feld_stm
 from kvdt_satzarten import *
+from my_token import Token
 
 
 def check_kvdt_felder(tokens):
@@ -35,11 +36,11 @@ class Lexer:
         self.pos = 0
 
     def value(self):
-        return self.sequence[self.pos] if self.pos <self.len else None
+        v = self.sequence[self.pos] if self.pos < self.len else Token(None, '')
+        return v
 
     def advance(self, n = 1):
         self.pos += n
-        print self.sequence[self.pos].type if self.pos < self.len else 'EOF'
         return self.pos < self.len
 
     def valid(self):
@@ -48,35 +49,33 @@ class Lexer:
 
 def parse_struktur(lexer, struktur):
     # FK, BEZEICHNER, ANZAHL, MUSSKANN, REGELN, SUBFELDER
-
+    res = []
     for f in struktur:
+        (fk, bezeichner, anzahl, musskann, regeln, subfelder) = f
+
         v = lexer.value()
+        if v is None:
+            if  musskann == 'm':
+                raise Exception('Unerwartetes Ende des Satzes')
+            else:
+                continue
 
         # bestimmte erwartet
-        if f[MUSSKANN] == 'm' and len(f[REGELN]) == 0 and f[FK] != v.type:
-                raise Exception('parser-fehler in %s: %s erwartet, %s gefunden' % (struktur[0][BEZEICHNER], f[FK], v.type))
+        if musskann == 'm' and len(regeln) == 0 and fk != v.type:
+                raise Exception('parser-fehler in %s: %s erwartet, %s gefunden' % (struktur[0][BEZEICHNER], fk, v.type))
 
-        n = f[ANZAHL]
-        while f[FK] == v.type and n != 0:
-            n -= 1
+        while fk == v.type and anzahl != 0:
+            anzahl -= 1
+
+            res.append((v.type, v.attr))
             if not lexer.advance():
                 break
+            v = lexer.value()
+            if len(subfelder) > 0:
+                res.append(parse_struktur(lexer, subfelder))
+                v = lexer.value()
 
-            if len(f[SUBFELDER]) > 0:
-                parse_struktur(lexer, f[SUBFELDER])
-
-        i += 1
-        if not lexer.valid():
-            break
-
-    # alle Wert-Felder im Satz in Struktur ge-'parsed'
-    # nicht ge-'parsed' Strukturfelder müssen optional sein,
-    # damit es passt
-
-    while i < len(struktur) and struktur[i][MUSSKANN] == 'k':
-        i += 1
-    print
-    return i >= len(struktur)
+    return res
 
 
 def parse(saetze):
@@ -92,7 +91,7 @@ def parse(saetze):
         print "ADT-konformes Paket"
         for s in saetze:
             print s[0].attr
-            parse_struktur(Lexer(s), NAME_2_STRUKTUR[s[0].attr])
+            print parse_struktur(Lexer(s), NAME_2_STRUKTUR[s[0].attr])
     else:
         print "nicht ADT-konformes Paket!"
 
