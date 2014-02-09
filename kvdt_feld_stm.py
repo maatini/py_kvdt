@@ -6,7 +6,7 @@ __author__ = 'Martin'
 
 """
 Liste alle Feldkennungen mit den Attributen
-    Feldbezeichnung, Länge, Typ, Vorkommen in Sätzen, Erläuterung
+    Feldbezeichnung, Länge, Typ, Erläuterung
     Struktur aus KVDT-Beschreibung übernommen.
     Aufbau:
         Feldkennung -> (Feldbeschreibung, Type-Info)
@@ -201,7 +201,16 @@ ALLE_FELDKENNUNGEN = {
 };
 
 
-def check_feldkennung(t):
+def check_feldkennung(feldkennung, feldkennungswert):
+    """
+    Prüfungen:
+        - feldkennung im Stamm enthalten
+        - feldkennungswert erfüllt Längenrestriktionen
+        - feldkennungswert erfüllt Bildungsvorschrift
+
+    Prüfungen benötigen noch den letzten Feinschliff! Prinzip ist aber klar.
+    """
+
     def check_length(type_info, v):
         if type_info[-1] == DATUM:
             return len(v) == 8
@@ -218,7 +227,7 @@ def check_feldkennung(t):
         # letztes ELement des Arrays ist Typangabe (a, d, g, n)
         type = type_info[-1]
         if type == DATUM:
-            #ttmmjjjj
+            #ttmmjjjj Prüfung unvollständig!
             try:
                 tag = int(v[0:2])
                 monat = int(v[2:4])
@@ -236,14 +245,14 @@ def check_feldkennung(t):
         return res
 
 
-    if not(t.type in ALLE_FELDKENNUNGEN):
-        return False, "Unbekannte Feldkennung '"+t.type+"'"
+    if not(feldkennung in ALLE_FELDKENNUNGEN):
+        return False, "Feldkennung '%s' nicht im Stamm enthalten!" % feldkennung
     else:
-        info = ALLE_FELDKENNUNGEN[t.type]
+        info = ALLE_FELDKENNUNGEN[feldkennung]
         err = ""
-        if not check_length(info[1], t.attr):
-            err += "Längenrestriktion nicht eingehalten!\n"
-        if  not check_value(info[1], t.attr):
-            err += "Wert nicht passend!\n"
+        if not check_length(info[1], feldkennungswert):
+            err += "Laengenrestriktion nicht eingehalten!\n"
+        if  not check_value(info[1], feldkennungswert):
+            err += "Wert entspricht nicht der Bildungsvorschrift!\n"
 
     return len(err) == 0, err

@@ -11,22 +11,19 @@ from my_token import Token
 
 
 def check_kvdt_felder(tokens):
+    """
+    Prüfung der Feldinhalte gegen die Felddefinition
+    Parameter tokens ist iterierbar und
+
+    """
     err_cnt = 0
     for t in tokens:
-
-        if t.type == '8000':
-            print "*********************satzart", t.attr
-
-        res, err_msg = kvdt_feld_stm.check_feldkennung(t)
+        res, err_msg = kvdt_feld_stm.check_feldkennung(t.type, t.attr)
         if not res:
-            print t, err_msg
+            print t.type, t.attr, "->",  err_msg
             err_cnt += 1
 
-        else:
-            info = kvdt_feld_stm.ALLE_FELDKENNUNGEN[t.type]
-            print "%s: >%s<" % (info[0],t.attr)
-
-    print "\n\nAufgetretene Fehler:", err_cnt
+    if err_cnt > 0: print "\n\nAufgetretene Fehler:", err_cnt
 
 
 class Lexer:
@@ -48,32 +45,43 @@ class Lexer:
 
 
 def parse_struktur(lexer, struktur):
-    # FK, BEZEICHNER, ANZAHL, MUSSKANN, REGELN, SUBFELDER
+    """
+        Einfacher Parser
+        Unterstrukturen werden mittels rekursiven Abstiegs behandelt
+    """
+
     res = []
     for f in struktur:
         (fk, bezeichner, anzahl, musskann, regeln, subfelder) = f
 
-        v = lexer.value()
-        if v is None:
-            if  musskann == 'm':
+        token = lexer.value()
+        if token is None:
+            # kann-Felder überlesen, falls keine Werte vorhanden sind
+            if musskann == 'm':
                 raise Exception('Unerwartetes Ende des Satzes')
             else:
                 continue
 
-        # bestimmte erwartet
-        if musskann == 'm' and len(regeln) == 0 and fk != v.type:
-                raise Exception('parser-fehler in %s: %s erwartet, %s gefunden' % (struktur[0][BEZEICHNER], fk, v.type))
+        # bestimmte Feldkennung erwartet
+        # Muss-Felder mit hinterlegter Regel werden als Kann-Felder behandelt
+        if musskann == 'm' and len(regeln) == 0 and fk != token.type:
+                raise Exception('parser-fehler in %s: %s erwartet, %s gefunden' % (struktur[0][BEZEICHNER], fk, token.type))
 
-        while fk == v.type and anzahl != 0:
+        # solange passende Werte vorhanden sind und die erlaubte Anzahl des Vorkommens nicht überschritten ist,
+        # lese Werte zum aktuellen Strukturelement
+        while fk == token.type and anzahl != 0:
             anzahl -= 1
 
-            res.append((v.type, v.attr))
-            if not lexer.advance():
-                break
-            v = lexer.value()
+            # Ergebnis des Parsens aktualisieren
+            res.append((token.type, token.attr))
+
+            if not lexer.advance(): break
+            token = lexer.value()
+
+            # ggf. rekursiver Aufruf um Unterstruktur zu parsen
             if len(subfelder) > 0:
                 res.append(parse_struktur(lexer, subfelder))
-                v = lexer.value()
+                token = lexer.value()
 
     return res
 
@@ -90,21 +98,37 @@ def parse(saetze):
     if re_adt.match(s):
         print "ADT-konformes Paket"
         for s in saetze:
-            print s[0].attr
-            print parse_struktur(Lexer(s), NAME_2_STRUKTUR[s[0].attr])
+            # Prüfung der Feldinhalte gegen die Felddefinition
+            check_kvdt_felder(s)
+
+            # Parsen der Sätze
+            lexer = Lexer(s)
+            data = parse_struktur(lexer, NAME_2_STRUKTUR[s[0].attr])
+            print data
+
+            # Nicht zuordenbare/ überzählige Werte anzeigen
+            # Ist ein harter Fehler!
+            if lexer.valid():
+                while lexer.valid():
+                    print "Ueberzaehlige Werte %s/%s" % (lexer.value().type, lexer.value().attr)
+                    lexer.advance()
+                print
     else:
         print "nicht ADT-konformes Paket!"
 
 
 def parse_demo():
+    import time
+    t0 = time.time()
+
     reader = kvdt_reader.KVDT_Reader()
     saetze = kvdt_reader.scan(r'H:\work\kvdt_filter\kvdt_data02.con')
 
-    #check_kvdt_felder(tokens)
     print len(saetze), "Sätze gelesen"
 
     parse(saetze)
-
+    t1 = time.time()
+    print "Zeit:", t1-t0, "Sekunden"
 
 
 parse_demo()

@@ -1,5 +1,46 @@
 #  -*- coding=iso-8859-15  -*-
 
+"""
+    Definition der KVDT - Sätze (ADT)
+    Syntax für Defintion
+    Satz            ::= '[' Satz Strukturelement'] | '[]'
+    Strukturelement ::= '[' Feldkennung ',' Bezeichnung ',' Anzahl ',' Musskann, ',[' Regeln '], '[' Satz ']'
+
+    Anzahl = -1 für uneingeschränkte Vorkommen
+    Regeln = Liste mit Regeln aus KVDT-Beschreibung z.B. R743
+    Musskann = einer der Werte ('m', 'k')
+
+    Zukünftig geplant sind Aktionen an bestimmten Stellen auszulösen. Aktionen
+    sind beliebige Python-Closure (ausführbarer Code)
+
+    Bsp.
+    besa = [
+        ["8000", "besa", 1, "m",  [], []],
+        ["0201", "BSNR", -1, "m",  [], []],
+        ["0203", "Bezeichnung", 1, "m",  [], []],
+        ["0212", "LANR", -1, "m",  [], [
+            ["0219", "Titel", 1, "k",  [], []],
+            ["0220", "Arztvorname", 1, "k",  [], []],
+            ["0221", "Namenszusatz", 1, "k",  [], []],
+            ["0211", "Arztname", 1, "m",  ["R719"], []]]
+            lanr_aktion
+        ],
+        ["0205", "Straße", 1, "m",  [], []],
+        ["0215", "PLZ", 1, "m",  [], []],
+        ["0216", "Ort", 1, "m",  [], []],
+        ["0208", "Telefonnummer", 1, "m",  [], []],
+        ["0209", "Telefaxnummer", 1, "k",  [], []],
+        ["0218", "EMail", 1, "k",  [], []]
+        besa_aktion
+    ]
+
+    'lanr_aktion' könnte z.B. die letzten eingelesen LANR-Daten in ein LANR-Objekt
+    umwandeln. 'besa_aktion' kann ein besa-Objekt erzeugen.
+
+    Faktorisierung der redundanten Definitionen der 010x-Sätze
+
+
+"""
 
 FK = 0
 BEZEICHNER = 1
