@@ -1,4 +1,23 @@
+
 #  -*- coding=iso-8859-15  -*-
+##    PyKVDT ein schlange und flexible KVDT-Bibliothek
+##    Copyright (C) 2014  martin.richardt@googlemail.com
+##
+##    This program is free software: you can redistribute it and/or modify
+##    it under the terms of the GNU General Public License as published by
+##    the Free Software Foundation, either version 3 of the License, or
+##    (at your option) any later version.
+##
+##    This program is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##    GNU General Public License for more details.
+##
+##    You should have received a copy of the GNU General Public License
+##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+import kvdt_process
 
 """
     Definition der KVDT - S‰tze (ADT)
@@ -55,7 +74,8 @@ con0 = [
     ["9103", "Erstellungsdatum", 1, "m",  [], []],
     ["9106", "Zeichensatz", 1, "m",  [], [
         ["9132", "Datenpakete", -1, "m",  [], []]]
-    ]
+    ],
+    kvdt_process.process_con0
 ]
 
 con9 = [["8000", "con9", 1, "m",  [], []]]
@@ -68,8 +88,9 @@ besa = [
         ["0219", "Titel", 1, "k",  [], []],
         ["0220", "Arztvorname", 1, "k",  [], []],
         ["0221", "Namenszusatz", 1, "k",  [], []],
-        ["0211", "Arztname", 1, "m",  ["R719"], []]]
-    ],
+        ["0211", "Arztname", 1, "m",  ["R719"], []],
+    ], kvdt_process.process_lanr9],
+
     ["0205", "Straﬂe", 1, "m",  [], []],
     ["0215", "PLZ", 1, "m",  [], []],
     ["0216", "Ort", 1, "m",  [], []],

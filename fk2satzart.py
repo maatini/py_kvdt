@@ -1,6 +1,22 @@
 #  -*- coding=iso-8859-15  -*-
 
-import string
+##    PyKVDT ein schlange und flexible KVDT-Bibliothek
+##    Copyright (C) 2014  martin.richardt@googlemail.com
+##
+##    This program is free software: you can redistribute it and/or modify
+##    it under the terms of the GNU General Public License as published by
+##    the Free Software Foundation, either version 3 of the License, or
+##    (at your option) any later version.
+##
+##    This program is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##    GNU General Public License for more details.
+##
+##    You should have received a copy of the GNU General Public License
+##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 
 __author__ = 'Martin'
 
@@ -9,6 +25,8 @@ Zuordnung Feldkennungen zu Satzarten in denen diese vorkommen dürfen
 Leere Liste von Satzarten bedeutet Feldkennung unterliegt keine
 Beschränkung
 """
+
+import string
 
 FK_2_SATZART = {
     '0102': ['adt0', 'kad0', 'sad0'] ,

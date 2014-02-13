@@ -1,4 +1,19 @@
 #  -*- coding=iso-8859-15  -*-
+##    PyKVDT ein schlange und flexible KVDT-Bibliothek
+##    Copyright (C) 2014  martin.richardt@googlemail.com
+##
+##    This program is free software: you can redistribute it and/or modify
+##    it under the terms of the GNU General Public License as published by
+##    the Free Software Foundation, either version 3 of the License, or
+##    (at your option) any later version.
+##
+##    This program is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##    GNU General Public License for more details.
+##
+##    You should have received a copy of the GNU General Public License
+##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import string
 
@@ -251,8 +266,8 @@ def check_feldkennung(feldkennung, feldkennungswert):
         info = ALLE_FELDKENNUNGEN[feldkennung]
         err = ""
         if not check_length(info[1], feldkennungswert):
-            err += "Laengenrestriktion nicht eingehalten!\n"
+            err += "'%s' Laengenrestriktion nicht eingehalten!\n" % info[0]
         if  not check_value(info[1], feldkennungswert):
-            err += "Wert entspricht nicht der Bildungsvorschrift!\n"
+            err += "'%s' Wert entspricht nicht der Bildungsvorschrift!\n" % info[0]
 
     return len(err) == 0, err

@@ -1,8 +1,26 @@
 #  -*- coding=iso-8859-15  -*-
 
+##    PyKVDT eine schlange und flexible KVDT-Bibliothek
+##    Copyright (C) 2014  martin.richardt@googlemail.com
+##
+##    This program is free software: you can redistribute it and/or modify
+##    it under the terms of the GNU General Public License as published by
+##    the Free Software Foundation, either version 3 of the License, or
+##    (at your option) any later version.
+##
+##    This program is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##    GNU General Public License for more details.
+##
+##    You should have received a copy of the GNU General Public License
+##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 __author__ = 'Martin'
 
 import re
+import types
 
 import kvdt_reader
 import kvdt_feld_stm
@@ -13,8 +31,8 @@ from my_token import Token
 def check_kvdt_felder(tokens):
     """
     Prüfung der Feldinhalte gegen die Felddefinition
-    Parameter tokens ist iterierbar und
-
+    Parameter tokens ist iterierbar.
+    Konkrete Prüfungen siehe Modul kvdt_feld_stm.
     """
     err_cnt = 0
     for t in tokens:
@@ -27,13 +45,20 @@ def check_kvdt_felder(tokens):
 
 
 class Lexer:
+    """
+        Utility-Klasse für den Zugriff auf die Liste
+        der Feldkennung/ Feldkennungswerte-Liste
+    """
+    # EndOfToken
+    EOT = Token(None, '')
+
     def __init__(self, sequence):
         self.sequence = sequence
         self.len = len(sequence)
         self.pos = 0
 
     def value(self):
-        v = self.sequence[self.pos] if self.pos < self.len else Token(None, '')
+        v = self.sequence[self.pos] if self.pos < self.len else Lexer.EOT
         return v
 
     def advance(self, n = 1):
@@ -44,6 +69,9 @@ class Lexer:
         return self.pos < self.len
 
 
+    def __repr__(self):
+        return "pos:%d current:(%s, %s) seq:%s\n" % (self.pos, self.sequence[self.pos].type, self.sequence[self.pos].attr, ', '.join(map(lambda o:o.type+'/'+o.attr, self.sequence)))
+
 def parse_struktur(lexer, struktur):
     """
         Einfacher Parser
@@ -52,49 +80,81 @@ def parse_struktur(lexer, struktur):
 
     res = []
     for f in struktur:
-        (fk, bezeichner, anzahl, musskann, regeln, subfelder) = f
+        if type(f) is list:
+            (fk, bezeichner, anzahl, muss_kann, regeln, subfelder) = f[:6]
+        else:
+            # function ggf. muss letztes Element in Struktur sein
+            return f(res)
 
         token = lexer.value()
-        if token is None:
+        # keine weiteren Datenfelder vorhanden?
+        if token == Lexer.EOT:
             # kann-Felder überlesen, falls keine Werte vorhanden sind
-            if musskann == 'm':
+            if muss_kann == 'm' and len(regeln) == 0:
                 raise Exception('Unerwartetes Ende des Satzes')
             else:
                 continue
 
         # bestimmte Feldkennung erwartet
         # Muss-Felder mit hinterlegter Regel werden als Kann-Felder behandelt
-        if musskann == 'm' and len(regeln) == 0 and fk != token.type:
+        if fk != token.type and muss_kann == 'm' and len(regeln) == 0:
                 raise Exception('parser-fehler in %s: %s erwartet, %s gefunden' % (struktur[0][BEZEICHNER], fk, token.type))
+
+        # mehrfaches Vorkommen möglich?
+        ist_wiederholungsfeld = anzahl != 1
 
         # solange passende Werte vorhanden sind und die erlaubte Anzahl des Vorkommens nicht überschritten ist,
         # lese Werte zum aktuellen Strukturelement
+        res_struktur = []
         while fk == token.type and anzahl != 0:
             anzahl -= 1
 
-            # Ergebnis des Parsens aktualisieren
-            res.append((token.type, token.attr))
-
-            if not lexer.advance(): break
-            token = lexer.value()
+            # Ergebnis des Parsens merken
+            res_element = [(token.type, token.attr)]
 
             # ggf. rekursiver Aufruf um Unterstruktur zu parsen
-            if len(subfelder) > 0:
-                res.append(parse_struktur(lexer, subfelder))
-                token = lexer.value()
+            if lexer.advance() and len(subfelder) > 0:
+                # Unterstruktur parsen
+                # Abhängig von der Cardinalität (1-mal oder beliebig häufig)
+                # ein Array oder ein Array von Arrays erzeugen
+                # Beispiel hierzu sind Leistungen
+                res_sub = parse_struktur(lexer, subfelder)
+                res_element.extend(res_sub)
+
+                if type(f[-1]) is types.FunctionType:
+                    res_element = f[-1](res_element)
+
+            token = lexer.value()
+
+            # Ergebnis für Wiederholungsfelder ist Liste mit Elementen
+            # anderenfalls das Element
+            if len(res_element) > 0:
+                if ist_wiederholungsfeld:
+                    res_struktur.append(res_element)
+                else:
+                    res_struktur = res_element
+
+        if len(res_struktur) > 0:
+            if ist_wiederholungsfeld:
+                res.append(res_struktur)
+            else:
+                res.extend(res_struktur)
 
     return res
 
 
 def parse(saetze):
-    # allgemeiner Paket-Aufbau
+    # allgemeiner Paket-Aufbau auf Satzart-Ebene als regulärer Ausdruck
     # con0 besa [rvsa] adt0 {010?} adt9 kadt0 {0109} kadt9 sadt0 {sad?} sadt9 con9
 
-    # konkrerter ADT-Paket-Aufbau
+    # konkreter ADT-Paket-Aufbau
     # con0 besa rvsa adt0 {0101|0102|0103|0104} adt9 con9
     re_adt = re.compile(r'con0 besa rvsa adt0 ((0101 )|(0102 )|(0103 )|(0104 ))+\s*adt9 con9')
+
+    # erstelle aus den im Paket vorkommenden Satzarten einen durch ' ' separierten String
     s = ' '.join(map(lambda x: x[0].attr, saetze))
-    print s
+    # print s
+
     if re_adt.match(s):
         print "ADT-konformes Paket"
         for s in saetze:
@@ -117,19 +177,25 @@ def parse(saetze):
         print "nicht ADT-konformes Paket!"
 
 
-def parse_demo():
+def parse_demo(file_spec):
     import time
     t0 = time.time()
 
-    reader = kvdt_reader.KVDT_Reader()
-    saetze = kvdt_reader.scan(r'H:\work\kvdt_filter\kvdt_data02.con')
-
+    saetze = kvdt_reader.scan(file_spec)
     print len(saetze), "Sätze gelesen"
 
     parse(saetze)
+
     t1 = time.time()
     print "Zeit:", t1-t0, "Sekunden"
 
 
-parse_demo()
+import sys
+
+msg = """
+    PyKVDT  Copyright (C) 2014 martin.richardt@googlemail.com
+    This program comes with ABSOLUTELY NO WARRANTY
+"""
+
+parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'H:\work\kvdt_filter\kvdt_data02.con')
 
