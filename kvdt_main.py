@@ -68,9 +68,12 @@ class Lexer:
     def valid(self):
         return self.pos < self.len
 
-
     def __repr__(self):
-        return "pos:%d current:(%s, %s) seq:%s\n" % (self.pos, self.sequence[self.pos].type, self.sequence[self.pos].attr, ', '.join(map(lambda o:o.type+'/'+o.attr, self.sequence)))
+        return "pos:%d current:(%s, %s) seq:%s\n" % (
+            self.pos,
+            self.sequence[self.pos].type, self.sequence[self.pos].attr,
+            ', '.join(map(lambda o:o.type+'/'+o.attr, self.sequence))
+        )
 
 def parse_struktur(lexer, struktur):
     """
@@ -164,7 +167,7 @@ def parse(saetze):
             # Parsen der Sätze
             lexer = Lexer(s)
             data = parse_struktur(lexer, NAME_2_STRUKTUR[s[0].attr])
-            print data
+            #print data
 
             # Nicht zuordenbare/ überzählige Werte anzeigen
             # Ist ein harter Fehler!
@@ -187,7 +190,8 @@ def parse_demo(file_spec):
     parse(saetze)
 
     t1 = time.time()
-    print "Zeit:", t1-t0, "Sekunden"
+    delta = t1-t0
+    print "Zeit %f Sekunden -> #Saetze/min:%f" % (delta, 60.0/delta*len(saetze))
 
 
 import sys
@@ -197,5 +201,7 @@ msg = """
     This program comes with ABSOLUTELY NO WARRANTY
 """
 
-parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'H:\work\kvdt_filter\kvdt_data02.con')
+print msg
+
+parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'd:\work\kvdt_filter\kvdt_data02.con')
 

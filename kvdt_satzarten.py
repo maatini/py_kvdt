@@ -21,16 +21,17 @@ import kvdt_process
 
 """
     Definition der KVDT - Sätze (ADT)
-    Syntax für Defintion
-    Satz            ::= '[' Satz Strukturelement'] | '[]'
-    Strukturelement ::= '[' Feldkennung ',' Bezeichnung ',' Anzahl ',' Musskann, ',[' Regeln '], '[' Satz ']'
+    Die Definition basiert auf ein Strukturelement mit folgenden Aufbau
 
-    Anzahl = -1 für uneingeschränkte Vorkommen
-    Regeln = Liste mit Regeln aus KVDT-Beschreibung z.B. R743
-    Musskann = einer der Werte ('m', 'k')
+        '[' Feldkennung ',' Bezeichnung ',' Anzahl ',' Muss_kann, ',[' Regeln '], Substruktur* (',' Verarbeitungsfunktion)? ']'
 
-    Zukünftig geplant sind Aktionen an bestimmten Stellen auszulösen. Aktionen
-    sind beliebige Python-Closure (ausführbarer Code)
+
+    Semantik/Wertebereiche der Felder, soweit nicht bereits aus Namen ableitbar
+        Anzahl      = -1 für uneingeschränkte Vorkommen
+        Regeln      = Liste mit Regeln aus KVDT-Beschreibung z.B. R743, Simultaneingriff
+        Muss_kann   = einer der Werte ('m', 'k')
+        Substruktur = Unterstruktur mit identischem Aufbau
+        Verarbeitungsfunktion = Funktion zur Auswertung der Daten der Struktur
 
     Bsp.
     besa = [
@@ -53,11 +54,7 @@ import kvdt_process
         besa_aktion
     ]
 
-    'lanr_aktion' könnte z.B. die letzten eingelesen LANR-Daten in ein LANR-Objekt
-    umwandeln. 'besa_aktion' kann ein besa-Objekt erzeugen.
-
     Faktorisierung der redundanten Definitionen der 010x-Sätze
-
 
 """
 
@@ -237,7 +234,9 @@ s0101 = [
             ],
             ["5098", "BSNR", 1, "m",  [], []],
             ["5099", "LANR", 1, "m",  [], []]
-    ]]]],
+        ],
+        kvdt_process.process_leistung
+    ]]],
 
     ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
         ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
@@ -275,6 +274,7 @@ s0102 = [
     ["3116", "KV_Bereich", 1, "k",  [], []],
     ["3108", "Versichertenart", 1, "m",  [], []],
     ["3110", "Geschlecht", 1, "m",  [], []],
+
     ["4101", "Quartal", 1, "m",  [], []],
     ["4102", "Ausstellungsdatum", 1, "k",  [], []],
     ["4104", "Abrechnungs_VKNR", 1, "m",  [], []],
@@ -366,7 +366,9 @@ s0102 = [
             ],
             ["5098", "BSNR", 1, "m",  [], []],
             ["5099", "LANR", 1, "m",  [], []]
-    ]]]],
+        ],
+        kvdt_process.process_leistung
+    ]]],
 
     ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
         ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
@@ -471,7 +473,9 @@ s0103 = [
             ],
             ["5098", "BSNR", 1, "m",  [], []],
             ["5099", "LANR", 1, "m",  [], []]
-    ]]]],
+        ],
+        kvdt_process.process_leistung
+    ]]],
 
     ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
         ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
@@ -569,7 +573,9 @@ s0104 = [
             ],
             ["5098", "BSNR", 1, "m",  [], []],
             ["5099", "LANR", 1, "m",  [], []]
-    ]]]],
+        ],
+        kvdt_process.process_leistung
+    ]]],
 
     ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
         ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],

@@ -21,7 +21,7 @@
 __author__ = 'Martin'
 
 """
-Zuordnung Feldkennungen zu Satzarten in denen diese vorkommen dürfen
+Vorkommen von  Feldkennungen in Satzarten
 Leere Liste von Satzarten bedeutet Feldkennung unterliegt keine
 Beschränkung
 """
