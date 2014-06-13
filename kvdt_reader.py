@@ -17,7 +17,7 @@
 
 __author__ = 'Martin'
 
-from my_token import Token
+from kvdt_token import Token
 
 class KVDT_Reader:
     """
