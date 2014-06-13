@@ -1,3 +1,0 @@
-# Aufbau: Feldkennung, Kardinalität, Muss/Kann, Regel, Feldbezeichnung
-
-8000  1  M Satzart
