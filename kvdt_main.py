@@ -26,7 +26,7 @@ import types
 import kvdt_reader
 import kvdt_feld_stm
 from kvdt_satzarten import *
-from my_token import Token
+from kvdt_token import Token
 
 
 def check_kvdt_felder(tokens):
