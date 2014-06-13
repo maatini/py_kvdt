@@ -18,6 +18,7 @@
 
 
 __author__ = 'Martin'
+__version__ = '0.01'
 
 import re
 import types
