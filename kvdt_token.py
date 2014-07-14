@@ -4,9 +4,10 @@
 #
 
 class Token:
-    def __init__(self, type, attr=None):
+    def __init__(self, type, attr=None, line_nbr=-1):
         self.type = type
         self.attr = attr
+        self.line_nbr = line_nbr
 
     #
     #  Not all these may be needed:

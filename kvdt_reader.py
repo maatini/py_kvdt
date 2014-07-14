@@ -31,8 +31,8 @@ class KVDT_Reader:
     def tokenize(self, filespec):
         f = open(filespec, "r")
         satz = []
-        for line in f.readlines():
-            t = Token(line[3:7], line[7:-1])
+        for line_nbr, line in enumerate(f.readlines()):
+            t = Token(line[3:7], line[7:-1], line_nbr+1)
             if t.type == "8000":
                 if len(satz) > 0:
                     self.saetze.append(satz[:])

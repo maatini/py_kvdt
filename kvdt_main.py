@@ -22,6 +22,7 @@ __version__ = '0.01'
 
 import re
 import types
+import string
 
 import kvdt_reader
 import kvdt_feld_stm
@@ -115,6 +116,13 @@ def parse_struktur(lexer, struktur):
 
             # Ergebnis des Parsens merken
             res_element = [(token.type, token.attr)]
+            # Regeln prüfen
+            for regel in regeln:
+                if type(regel) is types.FunctionType:
+                    f = regel(gKontext)
+                    if not f:
+                        print "Zeile %d:Lambda-Ausdruck für Feld %s nicht erfüllt!" % (token.line_nbr, fk)
+
 
             # ggf. rekursiver Aufruf um Unterstruktur zu parsen
             if lexer.advance() and len(subfelder) > 0:
@@ -167,8 +175,10 @@ def parse(saetze):
 
             # Parsen der Sätze
             lexer = Lexer(s)
+            global gKontext
+            gKontext['Satzart'] = str(s[0])
             data = parse_struktur(lexer, NAME_2_STRUKTUR[s[0].attr])
-            #print data
+            print data
 
             # Nicht zuordenbare/ überzählige Werte anzeigen
             # Ist ein harter Fehler!
@@ -204,5 +214,7 @@ msg = """
 
 print msg
 
+# Kontext als globales Dictionary
+gKontext = {}
 parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'd:\work\kvdt_filter\kvdt_data02.con')
 

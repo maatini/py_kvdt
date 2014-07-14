@@ -33,6 +33,15 @@ import kvdt_process
         Substruktur = Unterstruktur mit identischem Aufbau
         Verarbeitungsfunktion = Funktion zur Auswertung der Daten der Struktur
 
+    Spezielle Regeln 'Funktions-Regeln'
+        Als Regel sind auch Funktionen/ Lambda-Ausdrücke (Prädikate) erlaubt
+        Auswertung der Funktion erfolgt mit dem Kontext als Parameter.
+        Bsp.:
+            lambda kontext:kontext["Satzart"] in ["0101", "0102", "0104"]
+            Prüft, ob die Satzart ders aktuellen Satzes einem der Werte 0101, 0102, 0104 entspricht.
+
+
+
     Bsp.
     besa = [
         ["8000", "besa", 1, "m",  [], []],
@@ -140,6 +149,70 @@ adt0 = [
 
 adt9 = [["8000", "adt9", 1, "m",  [], []]]
 
+Leistungen = [
+    "5001", "GNR", -1, "m",  [], [
+            ["5002", "Art_der_Untersuchung", 1, "k",  [], []],
+            ["5005", "Multiplikator", 1, "k",  [], []],
+            ["5006", "Um_Uhrzeit", 1, "k",  [], []],
+            ["5008", "DKM", 1, "k",  [], []],
+            ["5009", "Begründungstext", -1, "k",  [], []],
+            ["5012", "Sachkosten", -1, "k",  [], [
+                ["5011", "Sachkosten_Bezeichnung", -1, "m",  [], []]]
+            ],
+
+            ["5013", "Prozent_der_Leistung", 1, "k",  [], []],
+            ["5015", "Organ", -1, "k",  [], []],
+            ["5016", "Name_des_Arztes", -1, "k",  [], []],
+            ["5017", "Besuchsort", 1, "k",  [lambda kontext:kontext["Satzart"] in ["0101", "0102", "0104"]], []], # nur bei S101, 102, 104
+            ["5018", "Zone", 1, "k",  [], []],
+            ["5019", "Erbringungsort", 1, "k",  [], []],
+            ["5020", "Wiederholungsuntersuchung", 1, "k",  [], [
+                ["5021", "Jahr_der_letzten_Krebsfrüherkennungsuntersuchung", 1, "k",  [], []]]
+            ],
+            ["5023", "GO_Nummern_Zusatz", 1, "k",  [], []],
+            ["5024", "GNR_Zusatzkennzeichen", 1, "k",  [], []],
+            ["5025", "Aufnahmedatum", 1, "k",  [], []],
+            ["5026", "Entlassungsdatum", 1, "k",  [], []],
+            ["5034", "OP-Datum", 1, "k",  [], []],
+            ["5035", "OP-Schlüssel", -1, "k",  [], [
+                ["5041", "Seitenlokalisation_OPS", 1, "k",  [], []]]
+            ],
+            ["5036", "GNR_als_Begründung", -1, "k",  [], []],
+            ["5037", "Simultaneingriff", 1, "m",  ["Simultaneingriff"], []],
+            ["5038", "Komplikation", -1, "k",  [], []],
+            ["5040", "Patientennummer", 1, "k",  [], []],
+            ["5042", "Mengenangabe", 1, "k",  [], [
+                ["5043", "Maßeinheit", 1, "m",  [], []]]
+            ],
+            ["5044", "Preis_in_Cent", 1, "k",  [lambda kontext:kontext["Satzart"] in ["0102"]], []], # nur bei S102
+            ["5070", "OMIM_G_KODE", 1, "m",  ["R770"], []],
+            ["5071", "OMIM_P_KODE", 1, "m",  ["R770"], [
+                ["5072", "Gen_Name", -1, "m",  ["R772"], []],
+                ["5073", "Art_der_Erkrankung", -1, "m",  ["R773"], []]]
+            ],
+            ["5098", "BSNR", 1, "m",  [], []],
+            ["5099", "LANR", 1, "m",  [], []]
+        ],
+        kvdt_process.process_leistung
+    ]
+
+ICD_Codes = [
+    "6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
+        ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
+        ["6004", "Seitenlokalisation", 1, "k",  [], []],
+        ["6006", "Diagnosenerläuterung", -1, "k",  [], []],
+        ["6008", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
+    ]]
+
+Dauerdiagnosen = [
+    "3673", "Dauerdiagnose", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
+        ["3674", "Diagnosensicherheit", 1, "m",  [], []],
+        ["3675", "Seitenlokalisation", 1, "k",  [], []],
+        ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
+        ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
+    ]]
+
+
 s0101 = [
     ["8000", "0101", 1, "m",  [], []],
     ["3000", "Patientennummer", 1, "k",  [], []],
@@ -192,65 +265,10 @@ s0101 = [
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],
 
 
-    ["5000", "Leistungstag", -1, "m",  [], [
-        ["5001", "GNR", -1, "m",  [], [
-            ["5002", "Art_der_Untersuchung", 1, "k",  [], []],
-            ["5005", "Multiplikator", 1, "k",  [], []],
-            ["5006", "Um_Uhrzeit", 1, "k",  [], []],
-            ["5008", "DKM", 1, "k",  [], []],
-            ["5009", "Begründungstext", -1, "k",  [], []],
-            ["5012", "Sachkosten", -1, "k",  [], [
-                ["5011", "Sachkosten_Bezeichnung", -1, "m",  [], []]]
-            ],
+    ["5000", "Leistungstag", -1, "m",  [], [ Leistungen ]],
 
-            ["5013", "Prozent_der_Leistung", 1, "k",  [], []],
-            ["5015", "Organ", -1, "k",  [], []],
-            ["5016", "Name_des_Arztes", -1, "k",  [], []],
-            ["5017", "Besuchsort", 1, "k",  [], []],
-            ["5018", "Zone", 1, "k",  [], []],
-            ["5019", "Erbringungsort", 1, "k",  [], []],
-            ["5020", "Wiederholungsuntersuchung", 1, "k",  [], [
-                ["5021", "Jahr_der_letzten_Krebsfrüherkennungsuntersuchung", 1, "k",  [], []]]
-            ],
-            ["5023", "GO_Nummern_Zusatz", 1, "k",  [], []],
-            ["5024", "GNR_Zusatzkennzeichen", 1, "k",  [], []],
-            ["5025", "Aufnahmedatum", 1, "k",  [], []],
-            ["5026", "Entlassungsdatum", 1, "k",  [], []],
-            ["5034", "OP-Datum", 1, "k",  [], []],
-            ["5035", "OP-Schlüssel", -1, "k",  [], [
-                ["5041", "Seitenlokalisation_OPS", 1, "k",  [], []]]
-            ],
-            ["5036", "GNR_als_Begründung", -1, "k",  [], []],
-            ["5037", "Simultaneingriff", 1, "m",  ["Simultaneingriff"], []],
-            ["5038", "Komplikation", -1, "k",  [], []],
-            ["5040", "Patientennummer", 1, "k",  [], []],
-            ["5042", "Mengenangabe", 1, "k",  [], [
-                ["5043", "Maßeinheit", 1, "m",  [], []]]
-            ],
-            ["5070", "OMIM_G_KODE", 1, "m",  ["R770"], []],
-            ["5071", "OMIM_P_KODE", 1, "m",  ["R770"], [
-                ["5072", "Gen_Name", -1, "m",  ["R772"], []],
-                ["5073", "Art_der_Erkrankung", -1, "m",  ["R773"], []]]
-            ],
-            ["5098", "BSNR", 1, "m",  [], []],
-            ["5099", "LANR", 1, "m",  [], []]
-        ],
-        kvdt_process.process_leistung
-    ]]],
-
-    ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
-        ["6004", "Seitenlokalisation", 1, "k",  [], []],
-        ["6006", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["6008", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]],
-
-    ["3673", "Dauerdiagnose", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["3674", "Diagnosensicherheit", 1, "m",  [], []],
-        ["3675", "Seitenlokalisation", 1, "k",  [], []],
-        ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]]
+    ICD_Codes,
+    Dauerdiagnosen
 ]
 
 
@@ -322,67 +340,10 @@ s0102 = [
     ],
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],
 
+    ["5000", "Leistungstag", -1, "m",  [], [ Leistungen ]],
 
-    ["5000", "Leistungstag", -1, "m",  [], [
-        ["5001", "GNR", -1, "m",  [], [
-            ["5002", "Art_der_Untersuchung", 1, "k",  [], []],
-            ["5005", "Multiplikator", 1, "k",  [], []],
-            ["5006", "Um_Uhrzeit", 1, "k",  [], []],
-            ["5008", "DKM", 1, "k",  [], []],
-            ["5009", "Begründungstext", -1, "k",  [], []],
-            ["5012", "Sachkosten", -1, "k",  [], [
-                ["5011", "Sachkosten_Bezeichnung", -1, "m",  [], []]]
-            ],
-
-            ["5013", "Prozent_der_Leistung", 1, "k",  [], []],
-            ["5015", "Organ", -1, "k",  [], []],
-            ["5016", "Name_des_Arztes", -1, "k",  [], []],
-            ["5017", "Besuchsort", 1, "k",  [], []],
-            ["5018", "Zone", 1, "k",  [], []],
-            ["5019", "Erbringungsort", 1, "k",  [], []],
-            ["5020", "Wiederholungsuntersuchung", 1, "k",  [], [
-                ["5021", "Jahr_der_letzten_Krebsfrüherkennungsuntersuchung", 1, "k",  [], []]]
-            ],
-            ["5023", "GO_Nummern_Zusatz", 1, "k",  [], []],
-            ["5024", "GNR_Zusatzkennzeichen", 1, "k",  [], []],
-            ["5025", "Aufnahmedatum", 1, "k",  [], []],
-            ["5026", "Entlassungsdatum", 1, "k",  [], []],
-            ["5034", "OP-Datum", 1, "k",  [], []],
-            ["5035", "OP-Schlüssel", -1, "k",  [], [
-                ["5041", "Seitenlokalisation_OPS", 1, "k",  [], []]]
-            ],
-            ["5036", "GNR_als_Begründung", -1, "k",  [], []],
-            ["5037", "Simultaneingriff", 1, "m",  ["Simultaneingriff"], []],
-            ["5038", "Komplikation", -1, "k",  [], []],
-            ["5040", "Patientennummer", 1, "k",  [], []],
-            ["5042", "Mengenangabe", 1, "k",  [], [
-                ["5043", "Maßeinheit", 1, "m",  [], []]]
-            ],
-            ["5044", "Preis_in_Cent", 1, "k",  [], []],
-            ["5070", "OMIM_G_KODE", 1, "m",  ["R770"], []],
-            ["5071", "OMIM_P_KODE", 1, "m",  ["R770"], [
-                ["5072", "Gen_Name", -1, "m",  ["R772"], []],
-                ["5073", "Art_der_Erkrankung", -1, "m",  ["R773"], []]]
-            ],
-            ["5098", "BSNR", 1, "m",  [], []],
-            ["5099", "LANR", 1, "m",  [], []]
-        ],
-        kvdt_process.process_leistung
-    ]]],
-
-    ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
-        ["6004", "Seitenlokalisation", 1, "k",  [], []],
-        ["6006", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["6008", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]],
-
-    ["3673", "Dauerdiagnose", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["3674", "Diagnosensicherheit", 1, "m",  [], []],
-        ["3675", "Seitenlokalisation", 1, "k",  [], []],
-        ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]]
+    ICD_Codes,
+    Dauerdiagnosen
 ]
 
 s0103 = [
@@ -432,64 +393,10 @@ s0103 = [
     ["4233", "Behandlungszeitraum", -1, "m",  ["R354"], []],
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],
 
-    ["5000", "Leistungstag", -1, "m",  [], [
-        ["5001", "GNR", -1, "m",  [], [
-            ["5002", "Art_der_Untersuchung", 1, "k",  [], []],
-            ["5005", "Multiplikator", 1, "k",  [], []],
-            ["5006", "Um_Uhrzeit", 1, "k",  [], []],
-            ["5008", "DKM", 1, "k",  [], []],
-            ["5009", "Begründungstext", -1, "k",  [], []],
-            ["5012", "Sachkosten", -1, "k",  [], [
-                ["5011", "Sachkosten_Bezeichnung", -1, "m",  [], []]]
-            ],
+    ["5000", "Leistungstag", -1, "m",  [], [ Leistungen ]],
 
-            ["5013", "Prozent_der_Leistung", 1, "k",  [], []],
-            ["5015", "Organ", -1, "k",  [], []],
-            ["5016", "Name_des_Arztes", -1, "k",  [], []],
-            ["5018", "Zone", 1, "k",  [], []],
-            ["5019", "Erbringungsort", 1, "k",  [], []],
-            ["5020", "Wiederholungsuntersuchung", 1, "k",  [], [
-                ["5021", "Jahr_der_letzten_Krebsfrüherkennungsuntersuchung", 1, "k",  [], []]]
-            ],
-            ["5023", "GO_Nummern_Zusatz", 1, "k",  [], []],
-            ["5024", "GNR_Zusatzkennzeichen", 1, "k",  [], []],
-            ["5025", "Aufnahmedatum", 1, "k",  [], []],
-            ["5026", "Entlassungsdatum", 1, "k",  [], []],
-            ["5034", "OP-Datum", 1, "k",  [], []],
-            ["5035", "OP-Schlüssel", -1, "k",  [], [
-                ["5041", "Seitenlokalisation_OPS", 1, "k",  [], []]]
-            ],
-            ["5036", "GNR_als_Begründung", -1, "k",  [], []],
-            ["5037", "Simultaneingriff", 1, "m",  ["Simultaneingriff"], []],
-            ["5038", "Komplikation", -1, "k",  [], []],
-            ["5040", "Patientennummer", 1, "k",  [], []],
-            ["5042", "Mengenangabe", 1, "k",  [], [
-                ["5043", "Maßeinheit", 1, "m",  [], []]]
-            ],
-            ["5070", "OMIM_G_KODE", 1, "m",  ["R770"], []],
-            ["5071", "OMIM_P_KODE", 1, "m",  ["R770"], [
-                ["5072", "Gen_Name", -1, "m",  ["R772"], []],
-                ["5073", "Art_der_Erkrankung", -1, "m",  ["R773"], []]]
-            ],
-            ["5098", "BSNR", 1, "m",  [], []],
-            ["5099", "LANR", 1, "m",  [], []]
-        ],
-        kvdt_process.process_leistung
-    ]]],
-
-    ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
-        ["6004", "Seitenlokalisation", 1, "k",  [], []],
-        ["6006", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["6008", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]],
-
-    ["3673", "Dauerdiagnose", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["3674", "Diagnosensicherheit", 1, "m",  [], []],
-        ["3675", "Seitenlokalisation", 1, "k",  [], []],
-        ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]]
+    ICD_Codes,
+    Dauerdiagnosen
 ]
 
 s0104 = [
@@ -531,65 +438,10 @@ s0104 = [
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],
     ["4243", "Weiterbehandelnder_Arzt", 1, "m",  [], []],
 
-    ["5000", "Leistungstag", -1, "m",  [], [
-        ["5001", "GNR", -1, "m",  [], [
-            ["5002", "Art_der_Untersuchung", 1, "k",  [], []],
-            ["5005", "Multiplikator", 1, "k",  [], []],
-            ["5006", "Um_Uhrzeit", 1, "k",  [], []],
-            ["5008", "DKM", 1, "k",  [], []],
-            ["5009", "Begründungstext", -1, "k",  [], []],
-            ["5012", "Sachkosten", -1, "k",  [], [
-                ["5011", "Sachkosten_Bezeichnung", -1, "m",  [], []]]
-            ],
+    ["5000", "Leistungstag", -1, "m",  [], [ Leistungen ]],
 
-            ["5013", "Prozent_der_Leistung", 1, "k",  [], []],
-            ["5015", "Organ", -1, "k",  [], []],
-            ["5016", "Name_des_Arztes", -1, "k",  [], []],
-            ["5017", "Besuchsort", 1, "k",  [], []],
-            ["5018", "Zone", 1, "k",  [], []],
-            ["5019", "Erbringungsort", 1, "k",  [], []],
-            ["5020", "Wiederholungsuntersuchung", 1, "k",  [], [
-                ["5021", "Jahr_der_letzten_Krebsfrüherkennungsuntersuchung", 1, "k",  [], []]]
-            ],
-            ["5023", "GO_Nummern_Zusatz", 1, "k",  [], []],
-            ["5024", "GNR_Zusatzkennzeichen", 1, "k",  [], []],
-            ["5025", "Aufnahmedatum", 1, "k",  [], []],
-            ["5026", "Entlassungsdatum", 1, "k",  [], []],
-            ["5034", "OP-Datum", 1, "k",  [], []],
-            ["5035", "OP-Schlüssel", -1, "k",  [], [
-                ["5041", "Seitenlokalisation_OPS", 1, "k",  [], []]]
-            ],
-            ["5036", "GNR_als_Begründung", -1, "k",  [], []],
-            ["5037", "Simultaneingriff", 1, "m",  ["Simultaneingriff"], []],
-            ["5038", "Komplikation", -1, "k",  [], []],
-            ["5040", "Patientennummer", 1, "k",  [], []],
-            ["5042", "Mengenangabe", 1, "k",  [], [
-                ["5043", "Maßeinheit", 1, "m",  [], []]]
-            ],
-            ["5070", "OMIM_G_KODE", 1, "m",  ["R770"], []],
-            ["5071", "OMIM_P_KODE", 1, "m",  ["R770"], [
-                ["5072", "Gen_Name", -1, "m",  ["R772"], []],
-                ["5073", "Art_der_Erkrankung", -1, "m",  ["R773"], []]]
-            ],
-            ["5098", "BSNR", 1, "m",  [], []],
-            ["5099", "LANR", 1, "m",  [], []]
-        ],
-        kvdt_process.process_leistung
-    ]]],
-
-    ["6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
-        ["6004", "Seitenlokalisation", 1, "k",  [], []],
-        ["6006", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["6008", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]],
-
-    ["3673", "Dauerdiagnose", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
-        ["3674", "Diagnosensicherheit", 1, "m",  [], []],
-        ["3675", "Seitenlokalisation", 1, "k",  [], []],
-        ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
-        ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
-    ]]
+    ICD_Codes,
+    Dauerdiagnosen
 ]
 
 
