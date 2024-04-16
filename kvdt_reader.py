@@ -29,7 +29,7 @@ class KVDT_Reader:
         self.saetze = []
 
     def tokenize(self, filespec):
-        f = open(filespec, "r")
+        f = open(filespec, "r", encoding="ISO-8859-1")
         satz = []
         for line_nbr, line in enumerate(f.readlines()):
             t = Token(line[3:7], line[7:-1], line_nbr+1)
