@@ -43,7 +43,7 @@ def check_kvdt_felder(tokens):
             err_cnt += 1
 
     if err_cnt > 0:
-        print("\n\nAufgetretene Fehler:", err_cnt)
+        print("\n\nErrors occurred:", err_cnt)
 
 
 class Lexer:
@@ -123,7 +123,7 @@ def parse_struktur(lexer, struktur):
                 if isinstance(regel, types.FunctionType):
                     f = regel(gKontext)
                     if not f:
-                        print("Zeile %d:Lambda-Ausdruck für Feld %s nicht erfüllt!" % (token.line_nbr, fk))
+                        print("Line %d: Lambda expression for field %s not satisfied!" % (token.line_nbr, fk))
 
             # ggf. rekursiver Aufruf um Unterstruktur zu parsen
             if lexer.advance() and len(subfelder) > 0:
@@ -166,10 +166,10 @@ def parse(saetze):
 
     # erstelle aus den im Paket vorkommenden Satzarten einen durch ' ' separierten String
     s = ' '.join(map(lambda x: x[0].attr, saetze))
-    # print(s)
+    print(s)
 
     if re_adt.match(s):
-        print("ADT-konformes Paket")
+        print("ADT-compliant package")
         for s in saetze:
             # Prüfung der Feldinhalte gegen die Felddefinition
             check_kvdt_felder(s)
@@ -185,11 +185,11 @@ def parse(saetze):
             # Ist ein harter Fehler!
             if lexer.valid():
                 while lexer.valid():
-                    print("Ueberzaehlige Werte %s/%s" % (lexer.value().type, lexer.value().attr))
+                    print("Excess values %s/%s" % (lexer.value().type, lexer.value().attr))
                     lexer.advance()
                 print()
     else:
-        print("nicht ADT-konformes Paket!")
+        print("Not an ADT-compliant package!")
 
 
 def parse_demo(file_spec):
@@ -197,13 +197,13 @@ def parse_demo(file_spec):
     t0 = time.time()
 
     saetze = kvdt_reader.scan(file_spec)
-    print(len(saetze), "Sätze gelesen")
+    print(len(saetze), "Sentences read")
 
     parse(saetze)
 
     t1 = time.time()
     delta = t1 - t0
-    print("Zeit %f Sekunden -> #Saetze/min:%f" % (delta, 60.0 / delta * len(saetze)))
+    print("Time %f seconds -> #Sentences/min:%f" % (delta, 60.0 / delta * len(saetze)))
 
 
 import sys
@@ -217,5 +217,5 @@ print(msg)
 
 # Kontext als globales Dictionary
 gKontext = {}
-parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'/Users/vadim.peretokin/Documents/german-billing - all unzipped/XPM_KVDT.Praxis/Daten/Z05123456699_27.01.2024_12.00.con')
+parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'./Z05123456699_27.01.2024_12.00.con')
 
