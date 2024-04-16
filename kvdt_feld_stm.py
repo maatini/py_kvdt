@@ -71,6 +71,7 @@ ALLE_FELDKENNUNGEN = {
 '0219': ["Titel des Arztes / Title of the Doctor", [0, 15, ALPHANUMERISCH]],
 '0220': ["Arztvorname / Doctor's First Name", [0, 28, ALPHANUMERISCH]],
 '0221': ["Namenszusatz des Arztes / Additional Name of the Doctor", [0, 15, ALPHANUMERISCH]],
+'0222': ["ASV-Teamnummer / ASV team number", [0, 9, NUMERISCH]],
 '0300': ["Abrechnung von (zertifikatspflichtigen) Laborleistungen / Billing of (certificate-required) Laboratory Services", [1, 1, NUMERISCH]],
 '0301': ["pnSD/uu-Analysen / pnSD/uu Analyses", [1, 1, NUMERISCH]],
 '0302': ["Gerätetyp / Device Type", [0, 60, ALPHANUMERISCH]],

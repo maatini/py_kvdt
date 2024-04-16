@@ -20,25 +20,25 @@
 import kvdt_process
 
 """
-    Definition der KVDT - Sätze (ADT)
+    Definition der KVDT - Sï¿½tze (ADT)
     Die Definition basiert auf ein Strukturelement mit folgenden Aufbau
 
         '[' Feldkennung ',' Bezeichnung ',' Anzahl ',' Muss_kann, ',[' Regeln '], Substruktur* (',' Verarbeitungsfunktion)? ']'
 
 
     Semantik/Wertebereiche der Felder, soweit nicht bereits aus Namen ableitbar
-        Anzahl      = -1 für uneingeschränkte Vorkommen
+        Anzahl      = -1 fï¿½r uneingeschrï¿½nkte Vorkommen
         Regeln      = Liste mit Regeln aus KVDT-Beschreibung z.B. R743, Simultaneingriff
         Muss_kann   = einer der Werte ('m', 'k')
         Substruktur = Unterstruktur mit identischem Aufbau
         Verarbeitungsfunktion = Funktion zur Auswertung der Daten der Struktur
 
     Spezielle Regeln 'Funktions-Regeln'
-        Als Regel sind auch Funktionen/ Lambda-Ausdrücke (Prädikate) erlaubt
+        Als Regel sind auch Funktionen/ Lambda-Ausdrï¿½cke (Prï¿½dikate) erlaubt
         Auswertung der Funktion erfolgt mit dem Kontext als Parameter.
         Bsp.:
             lambda kontext:kontext["Satzart"] in ["0101", "0102", "0104"]
-            Prüft, ob die Satzart ders aktuellen Satzes einem der Werte 0101, 0102, 0104 entspricht.
+            Prï¿½ft, ob die Satzart ders aktuellen Satzes einem der Werte 0101, 0102, 0104 entspricht.
 
 
 
@@ -54,7 +54,7 @@ import kvdt_process
             ["0211", "Arztname", 1, "m",  ["R719"], []]]
             lanr_aktion
         ],
-        ["0205", "Straße", 1, "m",  [], []],
+        ["0205", "Straï¿½e", 1, "m",  [], []],
         ["0215", "PLZ", 1, "m",  [], []],
         ["0216", "Ort", 1, "m",  [], []],
         ["0208", "Telefonnummer", 1, "m",  [], []],
@@ -63,7 +63,7 @@ import kvdt_process
         besa_aktion
     ]
 
-    Faktorisierung der redundanten Definitionen der 010x-Sätze
+    Faktorisierung der redundanten Definitionen der 010x-Sï¿½tze
 
 """
 
@@ -95,9 +95,10 @@ besa = [
         ["0220", "Arztvorname", 1, "k",  [], []],
         ["0221", "Namenszusatz", 1, "k",  [], []],
         ["0211", "Arztname", 1, "m",  ["R719"], []],
+        ["0222", "ASV-Teamnummer", 1, "k",  [], []],
     ], kvdt_process.process_lanr9],
 
-    ["0205", "Straße", 1, "m",  [], []],
+    ["0205", "Straï¿½e", 1, "m",  [], []],
     ["0215", "PLZ", 1, "m",  [], []],
     ["0216", "Ort", 1, "m",  [], []],
     ["0208", "Telefonnummer", 1, "m",  [], []],
@@ -110,7 +111,7 @@ rvsa = [
     ["0201", "BSNR", -1, "m",  [],
         [["0300", "Laborleistungen", 1, "m",  [],
             [["0301", "Analysen", 1, "m",  ["R740"], [
-                    ["0302", "Gerätetyp", -1, "m",  ["R741"], [
+                    ["0302", "Gerï¿½tetyp", -1, "m",  ["R741"], [
                         ["0303", "Hersteller", 1, "m",  [], []]]]]],
             ["0304", "Analyt_ID", -1, "m",  ["R740"], [
                     ["0305", "RV_Zertifikat", 1, "m",  [], []]]]]]
@@ -120,18 +121,18 @@ rvsa = [
 
 adt0 = [
     ["8000", "Satzart", 1, "m",  [], []],
-    ["0105", "KBV-Prüfnummer", 1, "m",  [], []],
-    ["9102", "Empfänger", 1, "m",  [], []],
+    ["0105", "KBV-Prï¿½fnummer", 1, "m",  [], []],
+    ["9102", "Empfï¿½nger", 1, "m",  [], []],
     ["9212", "Version", 1, "m",  [], []],
     ["0102", "Softwareverantwortliche", 1, "m",  [], []],
-    ["0121", "Straße", 1, "m",  [], []],
+    ["0121", "Straï¿½e", 1, "m",  [], []],
     ["0122", "PLZ", 1, "m",  [], []],
     ["0123", "Ort", 1, "m",  [], []],
     ["0124", "Telefonnummer", 1, "m",  [], []],
     ["0125", "Telefaxnummer", 1, "k",  [], []],
     ["0111", "Email", 1, "k",  [], []],
     ["0126", "Regionaler_Systembetreuer", 1, "m",  [], []],
-    ["0127", "Straße_SB", 1, "m",  [], []],
+    ["0127", "Straï¿½e_SB", 1, "m",  [], []],
     ["0128", "PLZ_SB", 1, "m",  [], []],
     ["0129", "Ort_SB", 1, "m",  [], []],
     ["0130", "Telefonnummer_SB", 1, "m",  [], []],
@@ -143,7 +144,7 @@ adt0 = [
         ["9261", "Abrechnungsteil_x_von_y", 1, "m",  [], []]]
     ],
     ["9204", "Abrechnungsquartal", 1, "m",  [], []],
-    ["9250", "AVWG_Prüfnummer", -1, "k",  [], []]
+    ["9250", "AVWG_Prï¿½fnummer", -1, "k",  [], []]
 ]
 
 
@@ -155,7 +156,7 @@ Leistungen = [
             ["5005", "Multiplikator", 1, "k",  [], []],
             ["5006", "Um_Uhrzeit", 1, "k",  [], []],
             ["5008", "DKM", 1, "k",  [], []],
-            ["5009", "Begründungstext", -1, "k",  [], []],
+            ["5009", "Begrï¿½ndungstext", -1, "k",  [], []],
             ["5012", "Sachkosten", -1, "k",  [], [
                 ["5011", "Sachkosten_Bezeichnung", -1, "m",  [], []]]
             ],
@@ -167,22 +168,22 @@ Leistungen = [
             ["5018", "Zone", 1, "k",  [], []],
             ["5019", "Erbringungsort", 1, "k",  [], []],
             ["5020", "Wiederholungsuntersuchung", 1, "k",  [], [
-                ["5021", "Jahr_der_letzten_Krebsfrüherkennungsuntersuchung", 1, "k",  [], []]]
+                ["5021", "Jahr_der_letzten_Krebsfrï¿½herkennungsuntersuchung", 1, "k",  [], []]]
             ],
             ["5023", "GO_Nummern_Zusatz", 1, "k",  [], []],
             ["5024", "GNR_Zusatzkennzeichen", 1, "k",  [], []],
             ["5025", "Aufnahmedatum", 1, "k",  [], []],
             ["5026", "Entlassungsdatum", 1, "k",  [], []],
             ["5034", "OP-Datum", 1, "k",  [], []],
-            ["5035", "OP-Schlüssel", -1, "k",  [], [
+            ["5035", "OP-Schlï¿½ssel", -1, "k",  [], [
                 ["5041", "Seitenlokalisation_OPS", 1, "k",  [], []]]
             ],
-            ["5036", "GNR_als_Begründung", -1, "k",  [], []],
+            ["5036", "GNR_als_Begrï¿½ndung", -1, "k",  [], []],
             ["5037", "Simultaneingriff", 1, "m",  ["Simultaneingriff"], []],
             ["5038", "Komplikation", -1, "k",  [], []],
             ["5040", "Patientennummer", 1, "k",  [], []],
             ["5042", "Mengenangabe", 1, "k",  [], [
-                ["5043", "Maßeinheit", 1, "m",  [], []]]
+                ["5043", "Maï¿½einheit", 1, "m",  [], []]]
             ],
             ["5044", "Preis_in_Cent", 1, "k",  [lambda kontext:kontext["Satzart"] in ["0102"]], []], # nur bei S102
             ["5070", "OMIM_G_KODE", 1, "m",  ["R770"], []],
@@ -200,7 +201,7 @@ ICD_Codes = [
     "6001", "ICD_Code", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
         ["6003", "Diagnosensicherheit", 1, "m",  ["R484"], []],
         ["6004", "Seitenlokalisation", 1, "k",  [], []],
-        ["6006", "Diagnosenerläuterung", -1, "k",  [], []],
+        ["6006", "Diagnosenerlï¿½uterung", -1, "k",  [], []],
         ["6008", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
     ]]
 
@@ -208,7 +209,7 @@ Dauerdiagnosen = [
     "3673", "Dauerdiagnose", -1, "m",  ["R486", "R488", "R489", "R761", "R490", "R491", "R492", "R728", "R729"], [
         ["3674", "Diagnosensicherheit", 1, "m",  [], []],
         ["3675", "Seitenlokalisation", 1, "k",  [], []],
-        ["3676", "Diagnosenerläuterung", -1, "k",  [], []],
+        ["3676", "Diagnosenerlï¿½uterung", -1, "k",  [], []],
         ["3677", "Diagnosenausnahmetatbestand", -1, "m",  ["R491"], []]
     ]]
 
@@ -226,9 +227,9 @@ s0101 = [
     ["3104", "Titel", 1, "k",  [], []],
     ["3105", "Versichertennummer", 1, "m",  ["R752"], []],
     ["3119", "Versichertennummer_eGK", 1, "m",  ["R752"], []],
-    ["3107", "Straße", 1, "k",  [], []],
+    ["3107", "Straï¿½e", 1, "k",  [], []],
     ["3112", "PLZ", 1, "m",  ["R479"], []],
-    ["3114", "Wohnsitzländercode", 1, "k",  [], []],
+    ["3114", "Wohnsitzlï¿½ndercode", 1, "k",  [], []],
     ["3113", "Wohnort", 1, "k",  [], []],
     ["3116", "KV_Bereich", 1, "k",  [], []],
     ["3108", "Versichertenart", 1, "m",  [], []],
@@ -236,18 +237,18 @@ s0101 = [
     ["4101", "Quartal", 1, "m",  [], []],
     ["4102", "Ausstellungsdatum", 1, "k",  [], []],
     ["4104", "Abrechnungs_VKNR", 1, "m",  [], []],
-    ["4106", "Kostenträger", 1, "m",  [], []],
+    ["4106", "Kostentrï¿½ger", 1, "m",  [], []],
     ["4108", "Zulassungsnummer", 1, "k",  [], []],
     ["4109", "Letzter_Einlesetag", 1, "m",  ["VERSICHERTENKARTE"], []],
-    ["4110", "Gültigkeit_Bis", 1, "m",  ["R752"], []],
+    ["4110", "Gï¿½ltigkeit_Bis", 1, "m",  ["R752"], []],
     ["4111", "Krankenkassennummer", 1, "m",  [], []],
     ["4112", "Versichertenstatus", 1, "m",  ["R752"], []],
-    ["4113", "Statusergänzung", 1, "m",  ["R752"], []],
-    ["4121", "Gebührenordnung", 1, "m",  [], []],
+    ["4113", "Statusergï¿½nzung", 1, "m",  ["R752"], []],
+    ["4121", "Gebï¿½hrenordnung", 1, "m",  [], []],
     ["4122", "Abrechnungsgebiet", 1, "m",  [], []],
     ["4123", "Personenkreis", 1, "k",  [], []],
     ["4124", "SKT_Zusatzangaben", 1, "k",  [], []],
-    ["4125", "Gültigkeitszeitraum", 1, "k",  [], []],
+    ["4125", "Gï¿½ltigkeitszeitraum", 1, "k",  [], []],
     ["4126", "SKT_Bemerkungen", -1, "k",  [], []],
     ["4202", "Unfall", 1, "k",  [], []],
     ["4204", "Leistungsanspruch", 1, "k",  [], []],
@@ -261,7 +262,7 @@ s0101 = [
             ]
         ]]]
     ],
-    ["4236", "Abklärung_somatischer_Ursachen", 1, "k",  [], []],
+    ["4236", "Abklï¿½rung_somatischer_Ursachen", 1, "k",  [], []],
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],
 
 
@@ -285,9 +286,9 @@ s0102 = [
     ["3104", "Titel", 1, "k",  [], []],
     ["3105", "Versichertennummer", 1, "m",  ["R752"], []],
     ["3119", "Versichertennummer_eGK", 1, "m",  ["R752"], []],
-    ["3107", "Straße", 1, "k",  [], []],
+    ["3107", "Straï¿½e", 1, "k",  [], []],
     ["3112", "PLZ", 1, "m",  ["R479"], []],
-    ["3114", "Wohnsitzländercode", 1, "k",  [], []],
+    ["3114", "Wohnsitzlï¿½ndercode", 1, "k",  [], []],
     ["3113", "Wohnort", 1, "k",  [], []],
     ["3116", "KV_Bereich", 1, "k",  [], []],
     ["3108", "Versichertenart", 1, "m",  [], []],
@@ -296,18 +297,18 @@ s0102 = [
     ["4101", "Quartal", 1, "m",  [], []],
     ["4102", "Ausstellungsdatum", 1, "k",  [], []],
     ["4104", "Abrechnungs_VKNR", 1, "m",  [], []],
-    ["4106", "Kostenträger", 1, "m",  [], []],
+    ["4106", "Kostentrï¿½ger", 1, "m",  [], []],
     ["4108", "Zulassungsnummer", 1, "k",  [], []],
     ["4109", "Letzter_Einlesetag", 1, "m",  ["VERSICHERTENKARTE"], []],
-    ["4110", "Gültigkeit_Bis", 1, "m",  ["R752"], []],
+    ["4110", "Gï¿½ltigkeit_Bis", 1, "m",  ["R752"], []],
     ["4111", "Krankenkassennummer", 1, "m",  [], []],
     ["4112", "Versichertenstatus", 1, "m",  ["R752"], []],
-    ["4113", "Statusergänzung", 1, "m",  ["R752"], []],
-    ["4121", "Gebührenordnung", 1, "m",  [], []],
+    ["4113", "Statusergï¿½nzung", 1, "m",  ["R752"], []],
+    ["4121", "Gebï¿½hrenordnung", 1, "m",  [], []],
     ["4122", "Abrechnungsgebiet", 1, "m",  [], []],
     ["4123", "Personenkreis", 1, "k",  [], []],
     ["4124", "SKT_Zusatzangaben", 1, "k",  [], []],
-    ["4125", "Gültigkeitszeitraum", 1, "k",  [], []],
+    ["4125", "Gï¿½ltigkeitszeitraum", 1, "k",  [], []],
     ["4126", "SKT_Bemerkungen", -1, "k",  [], []],
     ["4202", "Unfall", 1, "k",  [], []],
     ["4204", "Leistungsanspruch", 1, "k",  [], []],
@@ -321,10 +322,10 @@ s0102 = [
     ]],
 
     ["4218", "BSNR", 1, "m",  ["R328"], [
-        ["4242", "Lebenslange_Arztnummer_Überweisers", 1, "m",  [], []]
+        ["4242", "Lebenslange_Arztnummer_ï¿½berweisers", 1, "m",  [], []]
     ]],
-    ["4219", "Überweisung", 1, "m",  ["R328"], []],
-    ["4220", "Überweisung", 1, "m",  ["R320"], []],
+    ["4219", "ï¿½berweisung", 1, "m",  ["R328"], []],
+    ["4220", "ï¿½berweisung", 1, "m",  ["R320"], []],
     ["4221", "Behandlung", 1, "m",  ["R404"], []],
     ["4229", "Ausnahmeindikation", 1, "k",  ["R432"], []],
 
@@ -359,9 +360,9 @@ s0103 = [
     ["3104", "Titel", 1, "k",  [], []],
     ["3105", "Versichertennummer", 1, "m",  ["R752"], []],
     ["3119", "Versichertennummer_eGK", 1, "m",  ["R752"], []],
-    ["3107", "Straße", 1, "k",  [], []],
+    ["3107", "Straï¿½e", 1, "k",  [], []],
     ["3112", "PLZ", 1, "m",  ["R479"], []],
-    ["3114", "Wohnsitzländercode", 1, "k",  [], []],
+    ["3114", "Wohnsitzlï¿½ndercode", 1, "k",  [], []],
     ["3113", "Wohnort", 1, "k",  [], []],
     ["3116", "KV_Bereich", 1, "k",  [], []],
     ["3108", "Versichertenart", 1, "m",  [], []],
@@ -369,14 +370,14 @@ s0103 = [
     ["4101", "Quartal", 1, "m",  [], []],
     ["4102", "Ausstellungsdatum", 1, "k",  [], []],
     ["4104", "Abrechnungs_VKNR", 1, "m",  [], []],
-    ["4106", "Kostenträger", 1, "m",  [], []],
+    ["4106", "Kostentrï¿½ger", 1, "m",  [], []],
     ["4108", "Zulassungsnummer", 1, "k",  [], []],
     ["4109", "Letzter_Einlesetag", 1, "m",  ["VERSICHERTENKARTE"], []],
-    ["4110", "Gültigkeit_Bis", 1, "m",  ["R752"], []],
+    ["4110", "Gï¿½ltigkeit_Bis", 1, "m",  ["R752"], []],
     ["4111", "Krankenkassennummer", 1, "m",  [], []],
     ["4112", "Versichertenstatus", 1, "m",  ["R752"], []],
-    ["4113", "Statusergänzung", 1, "m",  ["R752"], []],
-    ["4121", "Gebührenordnung", 1, "m",  [], []],
+    ["4113", "Statusergï¿½nzung", 1, "m",  ["R752"], []],
+    ["4121", "Gebï¿½hrenordnung", 1, "m",  [], []],
     ["4122", "Abrechnungsgebiet", 1, "m",  [], []],
     ["4123", "Personenkreis", 1, "k",  [], []],
     ["4124", "SKT_Zusatzangaben", 1, "k",  [], []],
@@ -387,8 +388,8 @@ s0103 = [
     ["4206", "Tag_der_Entbindung", 1, "k",  [], []],
     ["4207", "Diagnose", -1, "m",  ["R746"], []],
     ["4208", "Befund", -1, "m",  ["R746"], []],
-    ["4218", "BSNR_Überweisers", 1, "m",  ["R746"], [
-        ["4242", "LANR_Überweiser", 1, "m",  [], []]
+    ["4218", "BSNR_ï¿½berweisers", 1, "m",  ["R746"], [
+        ["4242", "LANR_ï¿½berweiser", 1, "m",  [], []]
     ]],
     ["4233", "Behandlungszeitraum", -1, "m",  ["R354"], []],
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],
@@ -412,27 +413,28 @@ s0104 = [
     ["3104", "Titel", 1, "k",  [], []],
     ["3105", "Versichertennummer", 1, "m",  ["R752"], []],
     ["3119", "Versichertennummer_eGK", 1, "m",  ["R752"], []],
-    ["3107", "Straße", 1, "k",  [], []],
+    ["3107", "Straï¿½e", 1, "k",  [], []],
     ["3112", "PLZ", 1, "m",  ["R479"], []],
-    ["3114", "Wohnsitzländercode", 1, "k",  [], []],
+    ["3114", "Wohnsitzlï¿½ndercode", 1, "k",  [], []],
     ["3113", "Wohnort", 1, "k",  [], []],
     ["3116", "KV_Bereich", 1, "k",  [], []],
     ["3108", "Versichertenart", 1, "m",  [], []],
     ["3110", "Geschlecht", 1, "m",  [], []],
     ["4101", "Quartal", 1, "m",  [], []],
     ["4104", "Abrechnungs_VKNR", 1, "m",  [], []],
-    ["4106", "Kostenträger", 1, "m",  [], []],
+    ["4106", "Kostentrï¿½ger", 1, "m",  [], []],
     ["4108", "Zulassungsnummer", 1, "k",  [], []],
     ["4109", "Letzter_Einlesetag", 1, "m",  ["VERSICHERTENKARTE"], []],
-    ["4110", "Gültigkeit_Bis", 1, "m",  ["R752"], []],
+    ["4133", "VersicherungsschutzBeginn", 1, "m", ["R775"], []],
+    ["4110", "Gï¿½ltigkeit_Bis", 1, "m",  ["R752"], []],
     ["4111", "Krankenkassennummer", 1, "m",  [], []],
     ["4112", "Versichertenstatus", 1, "m",  ["R752"], []],
-    ["4113", "Statusergänzung", 1, "m",  ["R752"], []],
-    ["4121", "Gebührenordnung", 1, "m",  [], []],
+    ["4113", "Statusergï¿½nzung", 1, "m",  ["R752"], []],
+    ["4121", "Gebï¿½hrenordnung", 1, "m",  [], []],
     ["4122", "Abrechnungsgebiet", 1, "m",  [], []],
     ["4123", "Personenkreis", 1, "k",  [], []],
     ["4124", "SKT_Zusatzangaben", 1, "k",  [], []],
-    ["4125", "Gültigkeitszeitraum", 1, "k",  [], []],
+    ["4125", "Gï¿½ltigkeitszeitraum", 1, "k",  [], []],
     ["4126", "SKT_Bemerkungen", -1, "k",  [], []],
     ["4202", "Unfall", 1, "k",  [], []],
     ["4239", "Scheinuntergruppe", 1, "m",  [], []],

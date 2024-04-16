@@ -23,7 +23,7 @@ __author__ = 'Martin'
 """
 Vorkommen von  Feldkennungen in Satzarten
 Leere Liste von Satzarten bedeutet Feldkennung unterliegt keine
-Beschränkung
+Beschrï¿½nkung
 """
 
 import string
@@ -58,6 +58,7 @@ FK_2_SATZART = {
     '0219': ['besa'] ,
     '0220': ['besa'] ,
     '0221': ['besa'] ,
+    '0222': ['besa'] ,
     '0300': ['rvsa'] ,
     '0301': ['rvsa'] ,
     '0302': ['rvsa'] ,
