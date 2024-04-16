@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-##    PyKVDT eine schlange und flexible KVDT-Bibliothek
+##    PyKVDT a snake and flexible KVDT library
 ##    Copyright (C) 2014  martin.richardt@googlemail.com
 ##
 ##    This program is free software: you can redistribute it and/or modify
@@ -31,9 +31,9 @@ from kvdt_token import Token
 
 def check_kvdt_felder(tokens):
     """
-    Prüfung der Feldinhalte gegen die Felddefinition
-    Parameter tokens ist iterierbar.
-    Konkrete Prüfungen siehe Modul kvdt_feld_stm.
+    Check field contents against the field definition
+    Parameter tokens is iterable.
+    See the kvdt_feld_stm module for specific checks.
     """
     err_cnt = 0
     for t in tokens:
@@ -48,8 +48,8 @@ def check_kvdt_felder(tokens):
 
 class Lexer:
     """
-        Utility-Klasse für den Zugriff auf die Liste
-        der Feldkennung/ Feldkennungswerte-Liste
+        Utility class for accessing the list
+        of field identifications/ field value lists
     """
     # EndOfToken
     EOT = Token(None, '')
@@ -80,8 +80,8 @@ class Lexer:
 
 def parse_struktur(lexer, struktur):
     """
-        Einfacher Parser
-        Unterstrukturen werden mittels rekursiven Abstiegs behandelt
+        Simple parser
+        Substructures are treated via recursive descent
     """
 
     res = []
@@ -89,48 +89,48 @@ def parse_struktur(lexer, struktur):
         if isinstance(f, list):
             (fk, bezeichner, anzahl, muss_kann, regeln, subfelder) = f[:6]
         else:
-            # function ggf. muss letztes Element in Struktur sein
+            # function possibly last element in structure
             return f(res)
 
         token = lexer.value()
-        # keine weiteren Datenfelder vorhanden?
+        # no further data fields present?
         if token == Lexer.EOT:
-            # kann-Felder überlesen, falls keine Werte vorhanden sind
+            # skip optional fields if no values are present
             if muss_kann == 'm' and len(regeln) == 0:
-                raise Exception('Unerwartetes Ende des Satzes')
+                raise Exception('Unexpected end of the sentence')
             else:
                 continue
 
-        # bestimmte Feldkennung erwartet
-        # Muss-Felder mit hinterlegter Regel
-        # werden als Kann-Felder behandelt
+        # specific field identification expected
+        # Must fields with a defined rule
+        # are treated as optional fields
         if fk != token.type and muss_kann == 'm' and len(regeln) == 0:
-            raise Exception('parser-fehler in %s: %s erwartet, %s gefunden' % (struktur[0][BEZEICHNER], fk, token.type))
+            raise Exception('parser error in %s: %s expected, %s found' % (struktur[0][BEZEICHNER], fk, token.type))
 
-        # mehrfaches Vorkommen möglich?
-        ist_wiederholungsfeld = anzahl != 1
+        # multiple occurrences possible?
+        is_repeating_field = anzahl != 1
 
-        # solange passende Werte vorhanden sind und die erlaubte Anzahl des Vorkommens nicht überschritten ist,
-        # lese Werte zum aktuellen Strukturelement
+        # as long as matching values are present and the allowed occurrence count is not exceeded,
+        # read values to the current structural element
         res_struktur = []
         while fk == token.type and anzahl != 0:
             anzahl -= 1
 
-            # Ergebnis des Parsens merken
+            # Remember the parsing result
             res_element = [(token.type, token.attr)]
-            # Regeln prüfen
+            # Check rules
             for regel in regeln:
                 if isinstance(regel, types.FunctionType):
                     f = regel(gKontext)
                     if not f:
                         print("Line %d: Lambda expression for field %s not satisfied!" % (token.line_nbr, fk))
 
-            # ggf. rekursiver Aufruf um Unterstruktur zu parsen
+            # possibly recursive call to parse substructure
             if lexer.advance() and len(subfelder) > 0:
-                # Unterstruktur parsen
-                # Abhängig von der Cardinalität (1-mal oder beliebig häufig)
-                # ein Array oder ein Array von Arrays erzeugen
-                # Beispiel hierzu sind Leistungen
+                # Parse substructure
+                # Depending on the cardinality (once or arbitrarily often)
+                # create an array or an array of arrays
+                # Example are benefits
                 res_sub = parse_struktur(lexer, subfelder)
                 res_element.extend(res_sub)
 
@@ -139,16 +139,16 @@ def parse_struktur(lexer, struktur):
 
             token = lexer.value()
 
-            # Ergebnis für Wiederholungsfelder ist Liste mit Elementen
-            # anderenfalls das Element
+            # The result for repeating fields is a list with elements
+            # otherwise the element
             if len(res_element) > 0:
-                if ist_wiederholungsfeld:
+                if is_repeating_field:
                     res_struktur.append(res_element)
                 else:
                     res_struktur = res_element
 
         if len(res_struktur) > 0:
-            if ist_wiederholungsfeld:
+            if is_repeating_field:
                 res.append(res_struktur)
             else:
                 res.extend(res_struktur)
@@ -157,32 +157,32 @@ def parse_struktur(lexer, struktur):
 
 
 def parse(saetze):
-    # allgemeiner Paket-Aufbau auf Satzart-Ebene als regulärer Ausdruck
+    # general package structure at the sentence type level as a regular expression
     # con0 besa [rvsa] adt0 {010?} adt9 kadt0 {0109} kadt9 sadt0 {sad?} sadt9 con9
 
-    # konkreter ADT-Paket-Aufbau
+    # specific ADT package structure
     # con0 besa rvsa adt0 {0101|0102|0103|0104} adt9 con9
     re_adt = re.compile(r'con0 besa rvsa adt0 ((0101 )|(0102 )|(0103 )|(0104 ))+\s*adt9 con9')
 
-    # erstelle aus den im Paket vorkommenden Satzarten einen durch ' ' separierten String
+    # create a space-separated string from the sentence types occurring in the package
     s = ' '.join(map(lambda x: x[0].attr, saetze))
     print(s)
 
     if re_adt.match(s):
         print("ADT-compliant package")
         for s in saetze:
-            # Prüfung der Feldinhalte gegen die Felddefinition
+            # Check field contents against the field definition
             check_kvdt_felder(s)
 
-            # Parsen der Sätze
+            # Parse the sentences
             lexer = Lexer(s)
             global gKontext
             gKontext['Satzart'] = str(s[0])
             data = parse_struktur(lexer, NAME_2_STRUKTUR[s[0].attr])
             print(data)
 
-            # Nicht zuordenbare/ überzählige Werte anzeigen
-            # Ist ein harter Fehler!
+            # Display non-assignable/ excess values
+            # This is a serious error!
             if lexer.valid():
                 while lexer.valid():
                     print("Excess values %s/%s" % (lexer.value().type, lexer.value().attr))
@@ -215,7 +215,6 @@ msg = """
 
 print(msg)
 
-# Kontext als globales Dictionary
+# Context as a global dictionary
 gKontext = {}
 parse_demo(sys.argv[1] if len(sys.argv) > 1 else r'./Z05123456699_27.01.2024_12.00.con')
-
