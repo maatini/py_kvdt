@@ -19,6 +19,12 @@ class Satz:
         return self.type
 
 @dataclass
+class ValidationResult:
+    """Result of a validation operation."""
+    valid: bool
+    errors: List[str]
+
+@dataclass
 class FieldDefinition:
     """Definition of a KVDT field."""
     id: str

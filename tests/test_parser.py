@@ -9,7 +9,7 @@ class TestParser(unittest.TestCase):
         tokens = [
             Token("8000", "con0", 1),
             Token("9103", "27012024", 2), # Date valid, len 8
-            Token("9132", "Datenpaket1", 3)
+            Token("9132", "1", 3)
         ]
         satz = Satz("con0", tokens)
         
@@ -56,7 +56,7 @@ class TestParser(unittest.TestCase):
         tokens = [
              Token("8000", "con0", 1),
              # Missing 9103
-             Token("9132", "Datenpaket1", 3)
+             Token("9132", "1", 3)
         ]
         satz = Satz("con0", tokens)
         
