@@ -1,0 +1,20 @@
+{
+    "packages": [
+        "python@3.12",
+        "uv@latest",
+        "ruff@latest",
+        "black@latest"
+    ],
+    "shell": {
+        "init_hook": [
+            "echo 'Welcome to py_kvdt dev environment!'",
+            "echo 'Run `uv pip install -e .` to install the package.'"
+        ],
+        "scripts": {
+            "test": "python3 -m unittest discover tests",
+            "lint": "ruff check .",
+            "format": "black .",
+            "setup": "uv pip install -e ."
+        }
+    }
+}

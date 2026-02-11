@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "py_kvdt"
+version = "1.0.0"
+authors = [
+  { name="Martin Richardt", email="martin.richardt@googlemail.com" },
+]
+description = "A flexible KVDT library for Python"
+readme = "README.md"
+requires-python = ">=3.8"
+classifier = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/maatini/py_kvdt"
