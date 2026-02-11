@@ -19,6 +19,28 @@ Python library for parsing and validating KVDT files (KBV Datentransfer).
 2. Navigate to the directory: `cd py_kvdt`
 3. Install (editable mode): `pip install -e .`
 
+## Development with Devbox
+
+This project uses [Devbox](https://www.jetpack.io/devbox/) to manage a consistent development environment.
+
+### Prerequisites
+
+- Install Devbox: `curl -fsSL https://get.jetpack.io/devbox | bash`
+
+### Getting Started
+
+1.  Enter the shell: `devbox shell`
+2.  Initial setup (within shell): `devbox run setup`
+
+### Available Scripts
+
+You can run these scripts using `devbox run <script_name>`:
+
+- `test`: Run unit tests (`python3 -m unittest discover tests`)
+- `lint`: Run linting checks (`ruff check .`)
+- `format`: Format code (`black .`)
+- `setup`: Install the package in editable mode (`uv pip install -e .`)
+
 ## Usage
 
 ### CLI
