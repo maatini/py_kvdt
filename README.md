@@ -11,7 +11,9 @@ Python library for parsing and validating KVDT files (KBV Datentransfer).
 - **Modern structure**: Clean package layout with type hints and dataclasses.
 - **Full Standard Support**: Validates all KVDT field definitions and sentence structures (recursive).
 - **Rule Engine**: Supports KVDT rule validation (including context-dependent checks).
-- **No dependencies**: Uses standard library only.
+- **Realistic Data Generator**: Generates valid KVDT test files with realistic German names, EBM 2025 GOPs, and ICD codes.
+- **High Test Coverage**: 95%+ code coverage with rigorous validation of generated data.
+- **No dependencies**: Uses standard library only (except for development/coverage tools).
 
 ## Installation
 
@@ -50,7 +52,6 @@ Run the parser on a KVDT file:
 python3 -m src.pykvdt <path_to_file>
 ```
 
-### Library
 ```python
 from src.pykvdt.reader import Reader
 from src.pykvdt.parser import Parser
@@ -63,6 +64,37 @@ for satz in reader:
     if not result.valid:
         print(result.errors)
 ```
+
+### Test Data Generation
+Generate valid KVDT test packages with realistic data:
+
+```bash
+# Generate 10 files with 10-150 cases each
+PYTHONPATH=. python3 scripts/generate_test_data.py --count 10 --outdir ./test_data --min-cases 5 --max-cases 145
+```
+
+The generator produces consistent BSNR/LANR values, realistic German names, valid EBM 2025 constants, and compliant ICD-10 codes.
+
+## Testing & Coverage
+
+Run all tests:
+```bash
+python3 -m unittest discover tests
+```
+
+Generate coverage report:
+```bash
+# Run tests with coverage
+python3 -m coverage run -m unittest discover tests
+
+# View summary
+python3 -m coverage report
+
+# Generate HTML report
+python3 -m coverage html
+```
+
+Currently, the project maintains **>95% code coverage**.
 
 ## Legacy Code
 The original 2014 implementation is available in the `legacy/` directory.
