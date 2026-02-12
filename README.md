@@ -167,6 +167,11 @@ pdoc --output-dir docs src/pykvdt
 ```
 The documentation includes detailed type information for all classes and methods.
 
+## Credits & Attribution
+This project was developed by **Martin Richardt**. 
+
+If you use this project in your own work, please ensure that you provide appropriate credit by mentioning the author's name and linking back to this repository.
+
 ## License
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
