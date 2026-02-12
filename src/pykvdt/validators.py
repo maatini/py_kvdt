@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 
 class Validator:
@@ -29,20 +28,23 @@ class Validator:
 
     @staticmethod
     def check_alphanumeric(value: str) -> bool:
-        # KVDT alphanumeric allows spaces and special chars, so basic check is usually permissive
+        # KVDT alphanumeric allows spaces and special chars,
+        # so basic check is usually permissive
         # But we might want to check for illegal control chars if needed.
-        return True 
+        return True
 
     @staticmethod
     def check_gop(value: str) -> bool:
         """Checks GOP format: Digits, last char can be char."""
-        if not value: return False
-        if len(value) < 1: return False
-        
+        if not value:
+            return False
+        if len(value) < 1:
+            return False
+
         main_part = value[:-1]
         last_char = value[-1]
-        
+
         if main_part and not main_part.isdigit():
             return False
-        
+
         return last_char.isalnum()

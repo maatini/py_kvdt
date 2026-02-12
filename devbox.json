@@ -3,8 +3,7 @@
         "python@3.12",
         "uv@latest",
         "ruff@latest",
-        "black@latest",
-        "pdoc@latest"
+        "black@latest"
     ],
     "shell": {
         "init_hook": [

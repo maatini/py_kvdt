@@ -1,7 +1,7 @@
 import unittest
 from src.pykvdt.generator import Generator
-from src.pykvdt.parser import Parser
 from src.pykvdt.model import Satz
+from src.pykvdt.parser import Parser
 
 class TestGenerator(unittest.TestCase):
     def setUp(self):
