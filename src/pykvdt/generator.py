@@ -13,7 +13,7 @@ class Generator:
         self.sentence_type = ""
         self.context = context or GeneratorContext()
 
-    def generate_kvdt_file(self) -> List[Satz]:
+    def generate_kvdt_file(self, min_cases: int = 5, max_cases: int = 10) -> List[Satz]:
         """
         Generates a full KVDT file structure (Arztpakete).
         Sequence: con0 -> besa -> adt0 -> cases -> adt9 -> con9
@@ -33,8 +33,8 @@ class Generator:
         sentences.append(self.generate_sentence("adt0"))
         
         # 4. Cases (Arztpakete content)
-        # Generate a random number of cases (e.g., 5-10)
-        num_cases = random.randint(5, 10)
+        # Generate a random number of cases
+        num_cases = random.randint(min_cases, max_cases)
         case_types = ["0101", "0102", "0103", "0104"]
         
         for _ in range(num_cases):
@@ -129,16 +129,30 @@ class Generator:
             return "TEST"
             
         # Context-aware generation
-        if field_id in ["0201", "0217", "0218"]: # BSNR fields
-            return self.context.bsnr
-        # Context-aware generation
-        if field_id == "8000":
-            return self.sentence_type
-        if field_id in ["0201", "0217", "0218"]: # BSNR fields
-            return self.context.bsnr
         if field_id in ["0212", "4241", "4242", "5099"]: # LANR fields
             return self.context.get_random_lanr()
-
+            
+        # Realistic data mapping
+        if field_id == "3101": # Nachname
+            return self.context.get_last_name()
+        if field_id == "3102": # Vorname
+            return self.context.get_first_name()
+        if field_id == "3107": # Strasse
+            return self.context.get_street()
+        if field_id == "3109": # PLZ
+            return self.context.get_city_data()[0]
+        if field_id == "3110": # Ort
+            return self.context.get_city_data()[1]
+        if field_id == "5001": # GOP
+            return self.context.get_gop()
+        if field_id == "6001": # ICD-Kode
+            return self.context.get_icd()
+        if field_id == "6003": # Diagnosensicherheit
+            return self.context.get_diagnose_certainty()
+        if field_id == "3119": # Versichertenstatus
+            return self.context.get_insurance_status()
+        if field_id == "4101": # KTAB
+            return self.context.get_ktab()
         field_def = FIELDS[field_id]
         # Calculate length to generate
         length = field_def.max_len
