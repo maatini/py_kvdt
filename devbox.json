@@ -3,19 +3,22 @@
         "python@3.12",
         "uv@latest",
         "ruff@latest",
-        "black@latest"
+        "black@latest",
+        "mongodb"
     ],
     "shell": {
         "init_hook": [
             "echo 'Welcome to py_kvdt dev environment!'",
-            "echo 'Run `uv pip install -e .` to install the package.'"
+            "echo 'Run `uv pip install -e .` to install the package.'",
+            "mkdir -p .devbox/mongodb/data"
         ],
         "scripts": {
             "test": "python3 -m unittest discover tests",
             "lint": "ruff check .",
             "format": "black .",
             "docs": "pdoc --output-dir docs src/pykvdt",
-            "setup": "uv pip install -e ."
+            "setup": "uv pip install -e .",
+            "mongodb": "mongod --dbpath .devbox/mongodb/data --logpath .devbox/mongodb/mongod.log --fork"
         }
     }
 }
