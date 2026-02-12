@@ -129,6 +129,10 @@ class Generator:
             return "TEST"
             
         # Context-aware generation
+        if field_id == "8000":
+            return self.sentence_type
+        if field_id in ["0201", "0217", "0218"]: # BSNR fields
+            return self.context.bsnr
         if field_id in ["0212", "4241", "4242", "5099"]: # LANR fields
             return self.context.get_random_lanr()
             
@@ -139,19 +143,23 @@ class Generator:
             return self.context.get_first_name()
         if field_id == "3107": # Strasse
             return self.context.get_street()
-        if field_id == "3109": # PLZ
+        if field_id == "3112": # PLZ
             return self.context.get_city_data()[0]
-        if field_id == "3110": # Ort
+        if field_id == "3113": # Ort
             return self.context.get_city_data()[1]
         if field_id == "5001": # GOP
             return self.context.get_gop()
-        if field_id == "6001": # ICD-Kode
-            return self.context.get_icd()
+        if field_id in ["6001", "3673"]: # ICD-Kode (3-byte version)
+            return self.context.get_icd_3()
         if field_id == "6003": # Diagnosensicherheit
             return self.context.get_diagnose_certainty()
-        if field_id == "3119": # Versichertenstatus
+        if field_id == "3119": # Versichertennummer eGK
+            return self.context.get_insurance_id()
+        if field_id == "4112": # Versichertenstatus
             return self.context.get_insurance_status()
-        if field_id == "4101": # KTAB
+        if field_id == "4101": # Quartal
+            return self.context.get_quarter()
+        if field_id == "4106": # KTAB
             return self.context.get_ktab()
         field_def = FIELDS[field_id]
         # Calculate length to generate

@@ -49,13 +49,20 @@ class GeneratorContext:
     # Diagnosis Certainty
     _diagnose_certainty: List[str] = field(default_factory=lambda: ["G", "V", "A", "Z"])
     
-    # Insurance Status (Versichertenstatus)
-    # 1=Member, 3=Family, 5=Pensioner
-    # Plus status supplements (e.g. 1000, 3000, 5000 usually)
+    # Insurance ID (eGK Versichertennummer)
+    _egk_numbers: List[str] = field(default_factory=lambda: [
+        "A123456789", "B987654321", "C555444333", "D111222333", "E000000000",
+        "F123123123", "G456456456", "H789789789", "I098098098", "J135246357"
+    ])
+    
+    # Insurance Status (Versichertenstatus, field 4112)
     _insurance_status: List[str] = field(default_factory=lambda: ["1000", "3000", "5000", "1001", "3001", "5001"])
     
-    # KTAB (Kostenträgerabrechnungsbereich)
+    # KTAB (Kostenträgerabrechnungsbereich, field 4106)
     _ktab: List[str] = field(default_factory=lambda: ["00", "01", "02", "03", "04"])
+    
+    # Quartal (field 4101)
+    _quarters: List[str] = field(default_factory=lambda: ["12025", "22025", "32025", "42025"])
 
     def __post_init__(self):
         # Generate at least one doctor if none provided
@@ -86,11 +93,22 @@ class GeneratorContext:
     def get_icd(self) -> str:
         return random.choice(self._icds)
         
+    def get_icd_3(self) -> str:
+        # Return only the first 3 chars (e.g. J06) for restricted fields
+        return random.choice(self._icds)[:3].replace(".", "")
+        
     def get_diagnose_certainty(self) -> str:
         return random.choice(self._diagnose_certainty)
+        
+    def get_insurance_id(self) -> str:
+        return random.choice(self._egk_numbers)
         
     def get_insurance_status(self) -> str:
         return random.choice(self._insurance_status)
         
     def get_ktab(self) -> str:
         return random.choice(self._ktab)
+        
+    def get_quarter(self) -> str:
+        return random.choice(self._quarters)
+
