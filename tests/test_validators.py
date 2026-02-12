@@ -12,8 +12,10 @@ class TestValidator(unittest.TestCase):
 
     def test_check_period(self):
         self.assertTrue(Validator.check_period("0101202431122024"))
-        self.assertFalse(Validator.check_period("01012024")) # Too short
-        self.assertFalse(Validator.check_period("0101202432122024")) # Invalid second date
+        # Too short
+        self.assertFalse(Validator.check_period("01012024"))
+        # Invalid second date
+        self.assertFalse(Validator.check_period("0101202432122024"))
 
     def test_check_numeric(self):
         self.assertTrue(Validator.check_numeric("123"))
@@ -36,7 +38,8 @@ class TestValidator(unittest.TestCase):
         self.assertFalse(Validator.check_gop("A1234")) # First char letter
 
     def test_check_alphanumeric_length(self):
-        # Alphanumeric is permissive on content, but length matters in context (checked by Parser)
+        # Alphanumeric is permissive on content, but length matters
+        # in context (checked by Parser)
         # Validator itself just checks regex if any.
         self.assertTrue(Validator.check_alphanumeric("!@#$%^&*()"))
 

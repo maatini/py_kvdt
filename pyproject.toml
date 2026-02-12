@@ -23,9 +23,12 @@ classifiers = [
 [tool.ruff]
 # Target Python version
 target-version = "py38"
+line-length = 120
+
 # Include/Exclude rules
+extend-exclude = ["legacy"]
+force-exclude = true
 exclude = [
-    "legacy",
     ".git",
     "__pycache__",
     "docs",
@@ -36,10 +39,11 @@ exclude = [
 [tool.ruff.lint]
 # Enable specific rules
 select = ["E", "F", "W", "I"]
-# Allow unused imports in __init__.py for re-exports if not using explicit re-export
-# But we added 'as Name' which fixes F401.
+# Relax rules: ignore line length and import sorting
+ignore = ["E501", "I001"]
 
 [tool.black]
+line-length = 120
 exclude = '''
 /(
     legacy

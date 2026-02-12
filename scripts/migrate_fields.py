@@ -5,7 +5,7 @@ with open('legacy/kvdt_feld_stm.py', 'r', encoding='iso-8859-15') as f:
     content = f.read()
 
 # Regex to find dictionary entries: 'XXXX': ["Description", [min, max, TYPE]]
-# Example: '0102': ["Softwareverantwortlicher (SV) / Software Manager (SV)", [0, 60, ALPHANUMERISCH]],
+# Example: '0102': ["Softwareverantwortlicher (SV) ...", [0, 60, ALPHANUMERISCH]],
 pattern = re.compile(r"'(\d{4})':\s*\[\"(.*?)\",\s*\[(.*?)\]\],?")
 
 matches = pattern.findall(content)
@@ -23,11 +23,11 @@ print("FIELDS = {")
 
 for fk, desc, type_info in matches:
     # Clean up description (remove English translation after /)
-    desc_clean = desc.split('/')[0].strip()
-    
+    desc_clean = desc.split("/")[0].strip()
+
     # Parse type info: 0, 60, ALPHANUMERISCH
-    parts = [p.strip() for p in type_info.split(',')]
-    
+    parts = [p.strip() for p in type_info.split(",")]
+
     if len(parts) >= 3:
         min_len = parts[0]
         max_len = parts[1]
@@ -52,6 +52,9 @@ for fk, desc, type_info in matches:
         max_len = 0
         field_type = "'?'"
 
-    print(f"    '{fk}': FieldDefinition('{fk}', \"{desc_clean}\", {min_len}, {max_len}, {field_type}),")
+    print(
+        f"    '{fk}': FieldDefinition('{fk}', \"{desc_clean}\", "
+        f"{min_len}, {max_len}, {field_type}),"
+    )
 
 print("}")

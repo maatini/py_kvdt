@@ -4,9 +4,11 @@ import ast
 with open('legacy/kvdt_satzarten.py', 'r', encoding='iso-8859-15') as f:
     content = f.read()
 
-# Filter out imports and comments to make it parseable as AST or just use regex/parsing logic
-# Since the file is Python, we can try to use ast.parse, but it imports 'kvdt_process' and others which we don't want to load.
-# So we will parse the AST of the file without executing it.
+# Filter out imports and comments to make it parseable as AST or
+# just use regex/parsing logic. Since the file is Python, we can
+# try to use ast.parse, but it imports 'kvdt_process' and others
+# which we don't want to load. So we will parse the AST of the
+# file without executing it.
 
 tree = ast.parse(content)
 

@@ -12,10 +12,16 @@ def main():
         "--outdir", type=str, default="./test_data", help="Output directory"
     )
     parser.add_argument(
-        "--min-cases", type=int, default=5, help="Minimum number of cases per file"
+        "--min-cases",
+        type=int,
+        default=5,
+        help="Minimum number of cases per file",
     )
     parser.add_argument(
-        "--max-cases", type=int, default=10, help="Maximum number of cases per file"
+        "--max-cases",
+        type=int,
+        default=10,
+        help="Maximum number of cases per file",
     )
     args = parser.parse_args()
 
@@ -35,7 +41,7 @@ def main():
 
         filename = f"testfile_{i:03d}.con"
         filepath = os.path.join(args.outdir, filename)
-        
+
         with open(filepath, "wb") as f:
             for satz in sentences:
                 f.write(satz.to_bytes())
