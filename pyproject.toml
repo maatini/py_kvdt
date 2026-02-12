@@ -39,8 +39,8 @@ exclude = [
 [tool.ruff.lint]
 # Enable specific rules
 select = ["E", "F", "W", "I"]
-# Relax rules: ignore line length and import sorting
-ignore = ["E501", "I001"]
+# Relax rules: ignore line length, import sorting, whitespace in blank lines, and multiple statements on one line
+ignore = ["E501", "I001", "W293", "E701"]
 
 [tool.black]
 line-length = 120

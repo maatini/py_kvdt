@@ -20,7 +20,7 @@ class Satz:
     """Represents a KVDT sentence (a collection of tokens starting with 8000)."""
     type: str
     tokens: List[Token]
-    
+
     @property
     def Satzart(self) -> str:
         return self.type
@@ -39,10 +39,13 @@ class ValidationErrorObject:
 
     def __str__(self) -> str:
         context = []
-        if self.satz_type: context.append(f"Satz {self.satz_type}")
-        if self.line_nbr: context.append(f"Line {self.line_nbr}")
-        if self.field_id: context.append(f"Field {self.field_id}")
-        
+        if self.satz_type:
+            context.append(f"Satz {self.satz_type}")
+        if self.line_nbr:
+            context.append(f"Line {self.line_nbr}")
+        if self.field_id:
+            context.append(f"Field {self.field_id}")
+
         ctx_str = f"[{', '.join(context)}] " if context else ""
         return f"{ctx_str}{self.message}"
 

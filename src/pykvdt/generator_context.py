@@ -96,19 +96,19 @@ class GeneratorContext:
     def get_icd_3(self) -> str:
         # Return only the first 3 chars (e.g. J06) for restricted fields
         return random.choice(self._icds)[:3].replace(".", "")
-        
+
     def get_diagnose_certainty(self) -> str:
         return random.choice(self._diagnose_certainty)
-        
+
     def get_insurance_id(self) -> str:
         return random.choice(self._egk_numbers)
-        
+
     def get_insurance_status(self) -> str:
         return random.choice(self._insurance_status)
-        
+
     def get_ktab(self) -> str:
         return random.choice(self._ktab)
-        
+
     def get_quarter(self) -> str:
         return random.choice(self._quarters)
 
