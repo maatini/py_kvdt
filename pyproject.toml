@@ -11,6 +11,9 @@ authors = [
 description = "A flexible KVDT library for Python"
 readme = "README.md"
 requires-python = ">=3.8"
+dependencies = [
+    "pymongo>=4.0.0",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

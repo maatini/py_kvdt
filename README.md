@@ -12,8 +12,9 @@ Python library for parsing and validating KVDT files (KBV Datentransfer).
 - **Full Standard Support**: Validates all KVDT field definitions and sentence structures (recursive).
 - **Rule Engine**: Supports KVDT rule validation (including context-dependent checks).
 - **Realistic Data Generator**: Generates valid KVDT test files with realistic German names, EBM 2025 GOPs, and ICD codes.
+- **Pluggable Storage Sinks**: Export parsed data directly to **MongoDB** or **JSON** files.
 - **High Test Coverage**: 95%+ code coverage with rigorous validation of generated data.
-- **No dependencies**: Uses standard library only (except for development/coverage tools).
+- **Modern Stack**: Built with Python 3.12, `uv` for dependencies, and Devbox for infrastructure.
 
 ## Installation
 
@@ -39,18 +40,24 @@ This project uses [Devbox](https://www.jetpack.io/devbox/) to manage a consisten
 You can run these scripts using `devbox run <script_name>`:
 
 - `test`: Run unit tests (`python3 -m unittest discover tests`)
-- `lint`: Run linting checks (`ruff check .`)
-- `format`: Format code (`black .`)
-- `setup`: Install the package in editable mode (`uv pip install -e .`)
+- `lint`: Run relaxed linting checks (`ruff check .`)
+- `format`: Format code with 120 char limit (`black .`)
+- `setup`: Install the package and dependencies (`uv pip install -e .`)
+- `mongodb`: Start a local MongoDB instance in the background for storage tests.
 
 ## Usage
 
 ### CLI
 Run the parser on a KVDT file:
 
-```bash
-python3 -m src.pykvdt <path_to_file>
-```
+# Basic validation
+python3 -m pykvdt <path_to_file>
+
+# Store as JSON
+python3 -m pykvdt <path_to_file> --storage json --outdir ./output
+
+# Store in MongoDB
+python3 -m pykvdt <path_to_file> --storage mongo --uri "mongodb://localhost:27017/"
 
 ```python
 from pykvdt.reader import Reader
@@ -78,11 +85,11 @@ for satz in reader:
 The CLI provides a quick way to validate any KVDT file:
 
 ```bash
-# Basic validation
-python3 -m pykvdt.parser path/to/file.con
+# Basic validation using the module
+python3 -m pykvdt path/to/file.con
 
-# Using the included script for bulk generation and validation
-PYTHONPATH=src python3 scripts/generate_test_data.py --count 5 --outdir ./output
+# Using the included script for bulk generation
+PYTHONPATH=. python3 scripts/generate_test_data.py --count 5 --outdir ./output
 ```
 
 ### Advanced Error Handling
@@ -147,6 +154,9 @@ python3 -m coverage html
 
 Currently, the project maintains **>95% code coverage**.
 
+### Storage Tests
+The storage system is tested in `tests/test_storage.py`. By default, MongoDB tests are skipped unless a local instance is reachable.
+
 ## API Documentation
 Interactive HTML documentation is available and can be generated using `pdoc`:
 
@@ -156,6 +166,9 @@ devbox run docs
 pdoc --output-dir docs src/pykvdt
 ```
 The documentation includes detailed type information for all classes and methods.
+
+## License
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ## Legacy Code
 The original 2014 implementation is available in the `legacy/` directory.

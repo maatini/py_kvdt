@@ -8,6 +8,14 @@ class Token:
     attr: str  # The value of the field
     line_nbr: int
 
+    def to_dict(self) -> dict:
+        """Converts the token to a dictionary for serialization."""
+        return {
+            "type": self.type,
+            "attr": self.attr,
+            "line_nbr": self.line_nbr
+        }
+
     def to_bytes(self) -> bytes:
         """Converts the token to bytes representation (Length + Type + Content + CR + LF)."""
         content = self.attr.encode('iso-8859-1')
@@ -24,6 +32,13 @@ class Satz:
     @property
     def Satzart(self) -> str:
         return self.type
+
+    def to_dict(self) -> dict:
+        """Converts the sentence to a dictionary for serialization."""
+        return {
+            "type": self.type,
+            "tokens": [t.to_dict() for t in self.tokens]
+        }
 
     def to_bytes(self) -> bytes:
         """Converts the sentence to bytes."""
