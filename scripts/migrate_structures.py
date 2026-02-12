@@ -1,5 +1,4 @@
 import ast
-import re
 
 # Read legacy file
 with open('legacy/kvdt_satzarten.py', 'r', encoding='iso-8859-15') as f:
@@ -51,8 +50,10 @@ def parse_element(el):
     rules = []
     if isinstance(rules_node, ast.List):
         for r in rules_node.elts:
-             if hasattr(r, 's'): rules.append(r.s)
-             elif hasattr(r, 'value'): rules.append(r.value)
+             if hasattr(r, 's'):
+                 rules.append(r.s)
+             elif hasattr(r, 'value'):
+                 rules.append(r.value)
     
     # 5: Substructure (List)
     sub_node = el.elts[5]
@@ -101,9 +102,12 @@ def print_structure(item, indent=4):
     if item['type'] == 'Field':
         # Simplify defaults
         args = [f'"{item["id"]}"']
-        if not item['mandatory']: args.append("mandatory=False")
-        if item['count'] != 1: args.append(f"count={item['count']}")
-        if item['rules']: args.append(f"rules={item['rules']}")
+        if not item['mandatory']:
+            args.append("mandatory=False")
+        if item['count'] != 1:
+            args.append(f"count={item['count']}")
+        if item['rules']:
+            args.append(f"rules={item['rules']}")
         return f"{prefix}F({', '.join(args)})"
     elif item['type'] == 'Group':
         lines = [f"{prefix}G(["]
@@ -190,7 +194,8 @@ for node in tree.body:
                              if len(el.elts) > 1:
                                  name_node = el.elts[1]
                                  val = name_node.s if hasattr(name_node, 's') else name_node.value
-                                 if val: sentence_id = val
+                                 if val:
+                                     sentence_id = val
                                  
                         structure_items.append(parsed)
                     first = False
@@ -208,7 +213,7 @@ for node in tree.body:
                     print(f"{target_name} = SentenceDefinition(")
                     print(f'    id="{sentence_id}",')
                     print(f'    name="{target_name}",')
-                    print(f"    structure=[")
+                    print("    structure=[")
                     for item in structure_items:
                          if item.get('type') == 'ref':
                              print(f"        *{item['name']},")

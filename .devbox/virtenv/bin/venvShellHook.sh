@@ -1,0 +1,1 @@
+/Volumes/SSD2TB/work/antigravity/py_kvdt/.devbox/virtenv/python/bin/venvShellHook.sh

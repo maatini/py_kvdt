@@ -21,9 +21,12 @@ class KVDTValidationError(KVDTError):
         self.satz_type = satz_type
         
         context = []
-        if satz_type: context.append(f"Satz {satz_type}")
-        if line_nbr: context.append(f"Line {line_nbr}")
-        if field_id: context.append(f"Field {field_id}")
+        if satz_type:
+            context.append(f"Satz {satz_type}")
+        if line_nbr:
+            context.append(f"Line {line_nbr}")
+        if field_id:
+            context.append(f"Field {field_id}")
         
         ctx_str = f"[{', '.join(context)}] " if context else ""
         super().__init__(f"{ctx_str}{message}")

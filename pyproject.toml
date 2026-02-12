@@ -11,7 +11,7 @@ authors = [
 description = "A flexible KVDT library for Python"
 readme = "README.md"
 requires-python = ">=3.8"
-classifier = [
+classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -19,3 +19,39 @@ classifier = [
 
 [project.urls]
 "Homepage" = "https://github.com/maatini/py_kvdt"
+
+[tool.ruff]
+# Target Python version
+target-version = "py38"
+# Include/Exclude rules
+exclude = [
+    "legacy",
+    ".git",
+    "__pycache__",
+    "docs",
+    "test_packages",
+    "test_packages_realistic",
+]
+
+[tool.ruff.lint]
+# Enable specific rules
+select = ["E", "F", "W", "I"]
+# Allow unused imports in __init__.py for re-exports if not using explicit re-export
+# But we added 'as Name' which fixes F401.
+
+[tool.black]
+exclude = '''
+/(
+    legacy
+  | \.git
+  | \.hg
+  | \.pypy_cache
+  | \.pytest_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
