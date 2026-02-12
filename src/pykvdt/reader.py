@@ -1,5 +1,6 @@
 import typing
 from .model import Token, Satz
+from .exceptions import KVDTReaderError
 
 class Reader:
     """Reads a KVDT file and yields Sentences (lists of tokens)."""
@@ -16,22 +17,21 @@ class Reader:
             for line_nbr, line in enumerate(f, start=1):
                 # Only strip newline characters, preserve internal/trailing whitespace
                 line = line.rstrip('\n').rstrip('\r')
-                if not line:
+                if not line.strip():
                     continue
                 
                 # Basic parsing based on fixed width: LLL KKKK Content
                 # LLL = length (3 bytes), KKKK = type (4 bytes)
                 # We assume the file is line-delimited for now as per legacy reader.
                 if len(line) < 7:
-                    # Malformed line or empty
-                    continue
+                    raise KVDTReaderError("Line too short (min 7 bytes for LLLKKKK)", line_nbr=line_nbr)
 
                 try:
-                    # length = int(line[0:3]) # Not used in legacy reader, but part of spec
+                    # length_str = line[0:3]
                     field_type = line[3:7]
                     field_value = line[7:]
-                except ValueError:
-                    continue # Skip malformed lines
+                except Exception as e:
+                    raise KVDTReaderError(f"Failed to parse line: {e}", line_nbr=line_nbr)
 
                 token = Token(type=field_type, attr=field_value, line_nbr=line_nbr)
                 # print(f"DEBUG: '{line}' -> Type: '{field_type}', Attr: '{field_value}'")

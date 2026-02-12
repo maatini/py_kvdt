@@ -1,5 +1,5 @@
 from typing import List, Iterator, Dict, Any, Union, Optional
-from .model import Satz, Token, FieldReference, GroupReference, ValidationResult
+from .model import Satz, Token, FieldReference, GroupReference, ValidationResult, ValidationErrorObject
 from .definitions import FIELDS
 from .structures import SENTENCE_TYPES
 from .validators import Validator
@@ -10,11 +10,11 @@ class Parser:
 
     def validate_sentence(self, satz: Satz) -> ValidationResult:
         if satz.type not in SENTENCE_TYPES:
-             return ValidationResult(False, [f"Unknown sentence type: {satz.type}"])
+             return ValidationResult(False, [ValidationErrorObject(f"Unknown sentence type: {satz.type}", satz_type=satz.type)])
         
         self.current_satz_type = satz.type
         definition = SENTENCE_TYPES[satz.type]
-        self.errors: List[str] = []
+        self.errors: List[ValidationErrorObject] = []
         self.tokens = satz.tokens
         self.pos = 0
         
@@ -23,7 +23,13 @@ class Parser:
         
         # Check for excess tokens
         if self.pos < len(self.tokens):
-             self.errors.append(f"Excess tokens starting at index {self.pos}: {self.tokens[self.pos].type}")
+             token = self.tokens[self.pos]
+             self.errors.append(ValidationErrorObject(
+                 f"Excess tokens starting with {token.type}", 
+                 field_id=token.type, 
+                 line_nbr=token.line_nbr, 
+                 satz_type=self.current_satz_type
+             ))
 
         return ValidationResult(len(self.errors) == 0, self.errors)
 
@@ -59,7 +65,14 @@ class Parser:
                 break
         
         if field_ref.mandatory and count == 0:
-            self.errors.append(f"Missing mandatory field {field_ref.field_id}")
+            last_token = self.tokens[self.pos-1] if self.pos > 0 else None
+            line_nbr = last_token.line_nbr if last_token else None
+            self.errors.append(ValidationErrorObject(
+                f"Missing mandatory field {field_ref.field_id}", 
+                field_id=field_ref.field_id,
+                line_nbr=line_nbr,
+                satz_type=self.current_satz_type
+            ))
 
     def _match_group(self, group_ref: GroupReference):
         # Groups are complex because they don't have a single Token ID to peek at.
@@ -81,11 +94,15 @@ class Parser:
                 break
         
         if group_ref.mandatory and count == 0:
-             # It's mandatory but we didn't find it even once.
-             # However, determining "missing group" is hard without a clear start marker.
-             # If _group_starts_here returned False, maybe it's missing?
-             # For now we report it, but this might need refinement for complex optional groups.
-             self.errors.append(f"Missing mandatory group starting with {self._get_group_start_id(group_ref)}")
+             start_id = self._get_group_start_id(group_ref)
+             last_token = self.tokens[self.pos-1] if self.pos > 0 else None
+             line_nbr = last_token.line_nbr if last_token else None
+             self.errors.append(ValidationErrorObject(
+                 f"Missing mandatory group starting with {start_id}", 
+                 field_id=start_id,
+                 line_nbr=line_nbr,
+                 satz_type=self.current_satz_type
+             ))
 
     def _group_starts_here(self, group_ref: GroupReference) -> bool:
         """
@@ -128,7 +145,12 @@ class Parser:
     def _validate_token_content(self, token: Token, field_ref: FieldReference):
         field_def = FIELDS.get(token.type)
         if not field_def:
-            self.errors.append(f"Unknown field definition for {token.type}")
+            self.errors.append(ValidationErrorObject(
+                f"Unknown field definition for {token.type}", 
+                field_id=token.type,
+                line_nbr=token.line_nbr,
+                satz_type=self.current_satz_type
+            ))
             return
 
         valid_content = True
@@ -143,13 +165,23 @@ class Parser:
             valid_content = Validator.check_gop(token.attr)
         
         if not valid_content:
-             self.errors.append(f"Field {token.type} content invalid: '{token.attr}' (Expected type: {field_def.type})")
+             self.errors.append(ValidationErrorObject(
+                 f"Content invalid: '{token.attr}' (Expected type: {field_def.type})",
+                 field_id=token.type,
+                 line_nbr=token.line_nbr,
+                 satz_type=self.current_satz_type
+             ))
         else:
              # Length Validation (only if content format is valid)
              l = len(token.attr)
              if field_def.max_len > 0: # 0 means unlimited/unknown in my migration script fallback
                 if l < field_def.min_len or l > field_def.max_len:
-                    self.errors.append(f"Field {token.type} length mismatch: got {l}, expected {field_def.min_len}-{field_def.max_len}")
+                    self.errors.append(ValidationErrorObject(
+                        f"Length mismatch: got {l}, expected {field_def.min_len}-{field_def.max_len}",
+                        field_id=token.type,
+                        line_nbr=token.line_nbr,
+                        satz_type=self.current_satz_type
+                    ))
         
         # Rule Validation (Placeholder)
         if field_ref.rules:
@@ -183,10 +215,20 @@ class Parser:
                 
                 context = {"Satzart": self.current_satz_type}
                 if not rule_func(context):
-                     self.errors.append(f"Rule failed for {token.type}: {rule}")
+                     self.errors.append(ValidationErrorObject(
+                         f"Rule failed: {rule}",
+                         field_id=token.type,
+                         line_nbr=token.line_nbr,
+                         satz_type=self.current_satz_type
+                     ))
 
             except Exception as e:
-                self.errors.append(f"Error evaluating rule '{rule}' for {token.type}: {e}")
+                self.errors.append(ValidationErrorObject(
+                    f"Error evaluating rule '{rule}': {e}",
+                    field_id=token.type,
+                    line_nbr=token.line_nbr,
+                    satz_type=self.current_satz_type
+                ))
         
         else:
             # Semantic Rules (e.g. "R743")

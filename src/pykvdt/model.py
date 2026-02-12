@@ -30,10 +30,27 @@ class Satz:
         return b''.join(t.to_bytes() for t in self.tokens)
 
 @dataclass
+class ValidationErrorObject:
+    """Detailed information about a validation error."""
+    message: str
+    field_id: Optional[str] = None
+    line_nbr: Optional[int] = None
+    satz_type: Optional[str] = None
+
+    def __str__(self) -> str:
+        context = []
+        if self.satz_type: context.append(f"Satz {self.satz_type}")
+        if self.line_nbr: context.append(f"Line {self.line_nbr}")
+        if self.field_id: context.append(f"Field {self.field_id}")
+        
+        ctx_str = f"[{', '.join(context)}] " if context else ""
+        return f"{ctx_str}{self.message}"
+
+@dataclass
 class ValidationResult:
     """Result of a validation operation."""
     valid: bool
-    errors: List[str]
+    errors: List[ValidationErrorObject]
 
 @dataclass
 class FieldDefinition:

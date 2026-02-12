@@ -27,7 +27,7 @@ class TestParser(unittest.TestCase):
         
         result = parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertTrue(any("Field 9103 content invalid" in e for e in result.errors))
+        self.assertTrue(any("Content invalid" in str(e) for e in result.errors))
 
     def test_validate_sentence_invalid_length(self):
         parser = Parser()
@@ -48,7 +48,7 @@ class TestParser(unittest.TestCase):
         
         result = parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertTrue(any("Field 0201 length mismatch" in e for e in result.errors))
+        self.assertTrue(any("Length mismatch" in str(e) for e in result.errors))
 
     def test_validate_sentence_missing_mandatory(self):
         parser = Parser()
@@ -62,7 +62,7 @@ class TestParser(unittest.TestCase):
         
         result = parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertIn("Missing mandatory field 9103", result.errors)
+        self.assertTrue(any("Missing mandatory field 9103" in str(e) for e in result.errors))
 
     def test_validate_sentence_excess(self):
          parser = Parser()
@@ -75,14 +75,14 @@ class TestParser(unittest.TestCase):
          
          result = parser.validate_sentence(satz)
          self.assertFalse(result.valid)
-         self.assertTrue(any("Excess tokens" in e for e in result.errors))
+         self.assertTrue(any("Excess tokens" in str(e) for e in result.errors))
 
     def test_unknown_sentence_type(self):
         parser = Parser()
         satz = Satz("UNKNOWN_TYPE", [Token("8000", "UNKNOWN_TYPE", 1)])
         result = parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertIn("Unknown sentence type: UNKNOWN_TYPE", result.errors)
+        self.assertTrue(any("Unknown sentence type: UNKNOWN_TYPE" in str(e) for e in result.errors))
 
 if __name__ == '__main__':
     unittest.main()

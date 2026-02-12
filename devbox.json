@@ -3,7 +3,8 @@
         "python@3.12",
         "uv@latest",
         "ruff@latest",
-        "black@latest"
+        "black@latest",
+        "pdoc@latest"
     ],
     "shell": {
         "init_hook": [
@@ -14,6 +15,7 @@
             "test": "python3 -m unittest discover tests",
             "lint": "ruff check .",
             "format": "black .",
+            "docs": "pdoc --output-dir docs src/pykvdt",
             "setup": "uv pip install -e ."
         }
     }

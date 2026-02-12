@@ -27,7 +27,7 @@ class TestValidationOfTestPackages(unittest.TestCase):
                 for i, satz in enumerate(sentences):
                     result = self.parser.validate_sentence(satz)
                     if not result.valid:
-                        errors = "\n".join(result.errors)
+                        errors = "\n".join(str(e) for e in result.errors)
                         self.fail(f"Validation failed for {filename}, Satz {i} ({satz.type}):\n{errors}")
 
 if __name__ == "__main__":

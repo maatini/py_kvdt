@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        
+      - name: Install dependencies
+        run: uv pip install --system ruff black
+        
+      - name: Run Ruff
+        run: ruff check .
+        
+      - name: Run Black
+        run: black --check .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        
+      - name: Install package and dependencies
+        run: uv pip install --system -e . coverage
+        
+      - name: Run tests with coverage
+        run: |
+          coverage run -m unittest discover tests
+          coverage report -m
+          coverage xml
+          
+      - name: Check coverage threshold
+        run: |
+          TOTAL_COVERAGE=$(coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+          echo "Total coverage: $TOTAL_COVERAGE%"
+          if [ "$TOTAL_COVERAGE" -lt 90 ]; then
+            echo "Coverage is below 90%"
+            exit 1
+          fi
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install documentation tools
+        run: pip install pdoc
+        
+      - name: Build documentation
+        run: pdoc --output-dir docs src/pykvdt

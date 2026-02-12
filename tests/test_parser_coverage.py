@@ -10,14 +10,14 @@ class TestParserCoverage(unittest.TestCase):
         satz = Satz(type="UNKNOWN", tokens=[Token("8000", "UNKNOWN", 1)])
         result = self.parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertIn("Unknown sentence type: UNKNOWN", result.errors)
+        self.assertTrue(any("Unknown sentence type: UNKNOWN" in str(e) for e in result.errors))
 
     def test_missing_mandatory_field(self):
         # con9 requires 8000. Let's give it nothing.
         satz = Satz(type="con9", tokens=[]) 
         result = self.parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertIn("Missing mandatory field 8000", result.errors)
+        self.assertTrue(any("Missing mandatory field 8000" in str(e) for e in result.errors))
 
     def test_excess_tokens(self):
         # con9 requires only 8000. Add an extra token.
@@ -28,7 +28,7 @@ class TestParserCoverage(unittest.TestCase):
         satz = Satz(type="con9", tokens=tokens)
         result = self.parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertTrue(any("Excess tokens" in e for e in result.errors))
+        self.assertTrue(any("Excess tokens" in str(e) for e in result.errors))
 
     def test_invalid_field_content_date(self):
         # con0: 8000, 9103 (Date), 9132 (Group)...
@@ -43,8 +43,8 @@ class TestParserCoverage(unittest.TestCase):
         satz = Satz(type="con0", tokens=tokens)
         result = self.parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertTrue(any("content invalid" in e for e in result.errors))
-        self.assertTrue(any("Expected type: d" in e for e in result.errors))
+        self.assertTrue(any("Content invalid" in str(e) for e in result.errors))
+        self.assertTrue(any("Expected type: d" in str(e) for e in result.errors))
 
     def test_invalid_field_length(self):
         # 0105 is numeric 15-17 chars.
@@ -57,7 +57,7 @@ class TestParserCoverage(unittest.TestCase):
         satz = Satz(type="adt0", tokens=tokens)
         result = self.parser.validate_sentence(satz)
         self.assertFalse(result.valid)
-        self.assertTrue(any("length mismatch" in e for e in result.errors))
+        self.assertTrue(any("Length mismatch" in str(e) for e in result.errors))
 
     def test_rule_failure(self):
         # 5017 in 'besa' or 'adt0' shouldn't happen, but let's look for a rule.

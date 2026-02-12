@@ -3,6 +3,7 @@ import os
 import tempfile
 from src.pykvdt.reader import Reader
 from src.pykvdt.model import Token
+from src.pykvdt.exceptions import KVDTReaderError
 
 class TestReaderCoverage(unittest.TestCase):
     def test_empty_file(self):
@@ -17,8 +18,8 @@ class TestReaderCoverage(unittest.TestCase):
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
-    def test_malformed_lines(self):
-        # Lines shorter than 7 chars should be skipped
+    def test_malformed_lines_raise_error(self):
+        # Lines shorter than 7 chars should raise KVDTReaderError
         content = b"123\n0048000Test\n12\n"
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             tmp.write(content)
@@ -26,10 +27,10 @@ class TestReaderCoverage(unittest.TestCase):
         
         try:
             reader = Reader(tmp_path)
-            sentences = list(reader)
-            # Should parse the valid line "0048000Test" -> 8000:Test -> 1 sentence
-            self.assertEqual(len(sentences), 1)
-            self.assertEqual(sentences[0].tokens[0].attr, "Test")
+            with self.assertRaises(KVDTReaderError) as cm:
+                list(reader)
+            self.assertIn("Line too short", str(cm.exception))
+            self.assertEqual(cm.exception.line_nbr, 1)
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)

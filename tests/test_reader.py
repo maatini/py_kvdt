@@ -13,9 +13,6 @@ class TestReader(unittest.TestCase):
         # Empty lines (should be ignored)
         self.test_file.write("\n")
         self.test_file.write("   \n")
-        # Malformed lines (too short, should be ignored)
-        self.test_file.write("123\n") 
-        self.test_file.write("004123\n") # Length but no content? Actually Reader logic: len(line) < 7 check
         # Content with special chars (ISO-8859-15)
         self.test_file.write("0158000besa\n")
         # "Müller" in ISO-8859-15 is M\xfcller
