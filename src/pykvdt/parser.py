@@ -90,20 +90,32 @@ class Parser:
     def _group_starts_here(self, group_ref: GroupReference) -> bool:
         """
         Recursively checks if the current token matches the start of the group.
+        Handles optional leading items by checking subsequent items.
         """
         token = self._current_token()
         if not token:
             return False
             
-        first_item = group_ref.items[0] if group_ref.items else None
-        if not first_item:
-            return False # Empty group?
-
-        if isinstance(first_item, FieldReference):
-            return token.type == first_item.field_id
-        elif isinstance(first_item, GroupReference):
-            return self._group_starts_here(first_item)
-        
+        for item in group_ref.items:
+            match = False
+            if isinstance(item, FieldReference):
+                match = (token.type == item.field_id)
+            elif isinstance(item, GroupReference):
+                match = self._group_starts_here(item)
+            
+            if match:
+                return True
+            
+            # If the item is mandatory, and we didn't match it, then the group definitely doesn't start here.
+            # (Because if the group started here, this mandatory item MUST be present or be the start).
+            # Wait, if item is mandatory, it MUST be the first thing if previous were missing?
+            # Yes. If we haven't found a match yet, and we hit a mandatory item, 
+            # then that mandatory item IS the expected start. If it doesn't match, the group isn't here.
+            if item.mandatory:
+                return False
+                
+            # If item is optional, we continue to the next item to see if IT starts the group.
+            
         return False
 
     def _get_group_start_id(self, group_ref: GroupReference) -> str:

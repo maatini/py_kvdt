@@ -33,6 +33,19 @@ class TestValidator(unittest.TestCase):
         self.assertFalse(Validator.check_gop("01A34")) # Letter in middle
         self.assertFalse(Validator.check_gop(""))
         self.assertFalse(Validator.check_gop("A1234")) # First char letter
+        self.assertFalse(Validator.check_gop("A1234")) # First char letter
+
+    def test_check_alphanumeric_length(self):
+        # Alphanumeric is permissive on content, but length matters in context (checked by Parser)
+        # Validator itself just checks regex if any.
+        self.assertTrue(Validator.check_alphanumeric("!@#$%^&*()"))
+
+    def test_date_edge_cases(self):
+        # Leap year
+        self.assertTrue(Validator.check_date("29022024")) # 2024 is leap
+        self.assertFalse(Validator.check_date("29022023")) # 2023 is not
+        self.assertFalse(Validator.check_date("30022024")) # Feb never has 30
+        self.assertTrue(Validator.check_date("31129999")) # Far future
 
 if __name__ == '__main__':
     unittest.main()

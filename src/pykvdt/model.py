@@ -8,6 +8,13 @@ class Token:
     attr: str  # The value of the field
     line_nbr: int
 
+    def to_bytes(self) -> bytes:
+        """Converts the token to bytes representation (Length + Type + Content + CR + LF)."""
+        content = self.attr.encode('iso-8859-1')
+        type_bytes = self.type.encode('iso-8859-1')
+        length = len(content) + len(type_bytes) + 3 + 2 # +3 for length field itself (3 digits), +2 for CRLF
+        return f"{length:03d}".encode('iso-8859-1') + type_bytes + content + b'\r\n'
+
 @dataclass
 class Satz:
     """Represents a KVDT sentence (a collection of tokens starting with 8000)."""
@@ -17,6 +24,10 @@ class Satz:
     @property
     def Satzart(self) -> str:
         return self.type
+
+    def to_bytes(self) -> bytes:
+        """Converts the sentence to bytes."""
+        return b''.join(t.to_bytes() for t in self.tokens)
 
 @dataclass
 class ValidationResult:

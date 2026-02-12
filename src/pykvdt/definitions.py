@@ -83,6 +83,7 @@ FIELDS = {
     '4124': FieldDefinition('4124', "SKT-Zusatzangaben 5 / SKT Additional Information 5", 0, 60, ALPHANUMERISCH),
     '4125': FieldDefinition('4125', "Gültigkeitszeitraum von ... bis ... / Validity Period from ... to ...", 16, 16, ZEITRAUM),
     '4126': FieldDefinition('4126', "SKT-Bemerkungen / SKT Comments", 0, 60, ALPHANUMERISCH),
+    '4133': FieldDefinition('4133', "Vergütungsbereich / Remuneration Area", 2, 2, NUMERISCH),
     '4202': FieldDefinition('4202', "Unfall, Unfallfolgen / Accident, Accident Consequences", 1, 1, NUMERISCH),
     '4204': FieldDefinition('4204', "eingeschränkter Leistungsanspruch gemäß §716 Abs. 3a SGB V / Limited Benefit Entitlement according to §716 Abs. 3a SGB V", 1, 1, NUMERISCH),
     '4205': FieldDefinition('4205', "Auftrag / Order", 0, 60, ALPHANUMERISCH),

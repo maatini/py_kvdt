@@ -14,7 +14,8 @@ class Reader:
             current_tokens: typing.List[Token] = []
             
             for line_nbr, line in enumerate(f, start=1):
-                line = line.strip()
+                # Only strip newline characters, preserve internal/trailing whitespace
+                line = line.rstrip('\n').rstrip('\r')
                 if not line:
                     continue
                 
@@ -33,6 +34,7 @@ class Reader:
                     continue # Skip malformed lines
 
                 token = Token(type=field_type, attr=field_value, line_nbr=line_nbr)
+                # print(f"DEBUG: '{line}' -> Type: '{field_type}', Attr: '{field_value}'")
 
                 if token.type == "8000":
                     if current_tokens:
