@@ -73,6 +73,27 @@
 
             </li>
             <li>
+                    <a class="class" href="#ValidationErrorObject">ValidationErrorObject</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#ValidationErrorObject.__init__">ValidationErrorObject</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ValidationErrorObject.message">message</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ValidationErrorObject.field_id">field_id</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ValidationErrorObject.line_nbr">line_nbr</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ValidationErrorObject.satz_type">satz_type</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#ValidationResult">ValidationResult</a>
                             <ul class="memberlist">
                         <li>
@@ -224,42 +245,59 @@
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">)</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="nd">@dataclass</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="k">class</span> <span class="nc">ValidationResult</span><span class="p">:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of a validation operation.&quot;&quot;&quot;</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="nd">@dataclass</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="k">class</span> <span class="nc">FieldDefinition</span><span class="p">:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT field.&quot;&quot;&quot;</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">min_len</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">max_len</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># &#39;a&#39;, &#39;n&#39;, &#39;d&#39;, &#39;g&#39;, &#39;z&#39;</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="nd">@dataclass</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="k">class</span> <span class="nc">SentenceDefinition</span><span class="p">:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT sentence structure.&quot;&quot;&quot;</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">structure</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="nd">@dataclass</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="k">class</span> <span class="nc">FieldReference</span><span class="p">:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a field within a sentence structure.&quot;&quot;&quot;</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="n">field_id</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span> <span class="c1"># True = &#39;m&#39;, False = &#39;k&#39;</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># -1 for unlimited</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="nd">@dataclass</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="k">class</span> <span class="nc">GroupReference</span><span class="p">:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a group of fields within a sentence structure.&quot;&quot;&quot;</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="k">class</span> <span class="nc">ValidationErrorObject</span><span class="p">:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Detailed information about a validation error.&quot;&quot;&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">field_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">line_nbr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">satz_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="n">context</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">satz_type</span><span class="p">:</span> <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Satz </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">satz_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_nbr</span><span class="p">:</span> <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Line </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">line_nbr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_id</span><span class="p">:</span> <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Field </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">field_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="n">ctx_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context</span><span class="p">)</span><span class="si">}</span><span class="s2">] &quot;</span> <span class="k">if</span> <span class="n">context</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ctx_str</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="nd">@dataclass</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="k">class</span> <span class="nc">ValidationResult</span><span class="p">:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of a validation operation.&quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ValidationErrorObject</span><span class="p">]</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="nd">@dataclass</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="k">class</span> <span class="nc">FieldDefinition</span><span class="p">:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT field.&quot;&quot;&quot;</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">min_len</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="n">max_len</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># &#39;a&#39;, &#39;n&#39;, &#39;d&#39;, &#39;g&#39;, &#39;z&#39;</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="nd">@dataclass</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="k">class</span> <span class="nc">SentenceDefinition</span><span class="p">:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT sentence structure.&quot;&quot;&quot;</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="n">structure</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="nd">@dataclass</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="k">class</span> <span class="nc">FieldReference</span><span class="p">:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a field within a sentence structure.&quot;&quot;&quot;</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="n">field_id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span> <span class="c1"># True = &#39;m&#39;, False = &#39;k&#39;</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># -1 for unlimited</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="nd">@dataclass</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="k">class</span> <span class="nc">GroupReference</span><span class="p">:</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a group of fields within a sentence structure.&quot;&quot;&quot;</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -474,6 +512,101 @@
 
                             </div>
                 </section>
+                <section id="ValidationErrorObject">
+                            <input id="ValidationErrorObject-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+                    <div class="decorator decorator-dataclass">@dataclass</div>
+
+    <span class="def">class</span>
+    <span class="name">ValidationErrorObject</span>:
+
+                <label class="view-source-button" for="ValidationErrorObject-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#ValidationErrorObject"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ValidationErrorObject-33"><a href="#ValidationErrorObject-33"><span class="linenos">33</span></a><span class="nd">@dataclass</span>
+</span><span id="ValidationErrorObject-34"><a href="#ValidationErrorObject-34"><span class="linenos">34</span></a><span class="k">class</span> <span class="nc">ValidationErrorObject</span><span class="p">:</span>
+</span><span id="ValidationErrorObject-35"><a href="#ValidationErrorObject-35"><span class="linenos">35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Detailed information about a validation error.&quot;&quot;&quot;</span>
+</span><span id="ValidationErrorObject-36"><a href="#ValidationErrorObject-36"><span class="linenos">36</span></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="ValidationErrorObject-37"><a href="#ValidationErrorObject-37"><span class="linenos">37</span></a>    <span class="n">field_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="ValidationErrorObject-38"><a href="#ValidationErrorObject-38"><span class="linenos">38</span></a>    <span class="n">line_nbr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="ValidationErrorObject-39"><a href="#ValidationErrorObject-39"><span class="linenos">39</span></a>    <span class="n">satz_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="ValidationErrorObject-40"><a href="#ValidationErrorObject-40"><span class="linenos">40</span></a>
+</span><span id="ValidationErrorObject-41"><a href="#ValidationErrorObject-41"><span class="linenos">41</span></a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="ValidationErrorObject-42"><a href="#ValidationErrorObject-42"><span class="linenos">42</span></a>        <span class="n">context</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="ValidationErrorObject-43"><a href="#ValidationErrorObject-43"><span class="linenos">43</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">satz_type</span><span class="p">:</span> <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Satz </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">satz_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="ValidationErrorObject-44"><a href="#ValidationErrorObject-44"><span class="linenos">44</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_nbr</span><span class="p">:</span> <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Line </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">line_nbr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="ValidationErrorObject-45"><a href="#ValidationErrorObject-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_id</span><span class="p">:</span> <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Field </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">field_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="ValidationErrorObject-46"><a href="#ValidationErrorObject-46"><span class="linenos">46</span></a>        
+</span><span id="ValidationErrorObject-47"><a href="#ValidationErrorObject-47"><span class="linenos">47</span></a>        <span class="n">ctx_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context</span><span class="p">)</span><span class="si">}</span><span class="s2">] &quot;</span> <span class="k">if</span> <span class="n">context</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+</span><span id="ValidationErrorObject-48"><a href="#ValidationErrorObject-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ctx_str</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Detailed information about a validation error.</p>
+</div>
+
+
+                            <div id="ValidationErrorObject.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">ValidationErrorObject</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">message</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">field_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">line_nbr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">satz_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#ValidationErrorObject.__init__"></a>
+    
+    
+
+                            </div>
+                            <div id="ValidationErrorObject.message" class="classattr">
+                                <div class="attr variable">
+            <span class="name">message</span><span class="annotation">: str</span>
+
+        
+    </div>
+    <a class="headerlink" href="#ValidationErrorObject.message"></a>
+    
+    
+
+                            </div>
+                            <div id="ValidationErrorObject.field_id" class="classattr">
+                                <div class="attr variable">
+            <span class="name">field_id</span><span class="annotation">: Optional[str]</span>        =
+<span class="default_value">None</span>
+
+        
+    </div>
+    <a class="headerlink" href="#ValidationErrorObject.field_id"></a>
+    
+    
+
+                            </div>
+                            <div id="ValidationErrorObject.line_nbr" class="classattr">
+                                <div class="attr variable">
+            <span class="name">line_nbr</span><span class="annotation">: Optional[int]</span>        =
+<span class="default_value">None</span>
+
+        
+    </div>
+    <a class="headerlink" href="#ValidationErrorObject.line_nbr"></a>
+    
+    
+
+                            </div>
+                            <div id="ValidationErrorObject.satz_type" class="classattr">
+                                <div class="attr variable">
+            <span class="name">satz_type</span><span class="annotation">: Optional[str]</span>        =
+<span class="default_value">None</span>
+
+        
+    </div>
+    <a class="headerlink" href="#ValidationErrorObject.satz_type"></a>
+    
+    
+
+                            </div>
+                </section>
                 <section id="ValidationResult">
                             <input id="ValidationResult-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -486,11 +619,11 @@
 
     </div>
     <a class="headerlink" href="#ValidationResult"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ValidationResult-33"><a href="#ValidationResult-33"><span class="linenos">33</span></a><span class="nd">@dataclass</span>
-</span><span id="ValidationResult-34"><a href="#ValidationResult-34"><span class="linenos">34</span></a><span class="k">class</span> <span class="nc">ValidationResult</span><span class="p">:</span>
-</span><span id="ValidationResult-35"><a href="#ValidationResult-35"><span class="linenos">35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of a validation operation.&quot;&quot;&quot;</span>
-</span><span id="ValidationResult-36"><a href="#ValidationResult-36"><span class="linenos">36</span></a>    <span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="ValidationResult-37"><a href="#ValidationResult-37"><span class="linenos">37</span></a>    <span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ValidationResult-50"><a href="#ValidationResult-50"><span class="linenos">50</span></a><span class="nd">@dataclass</span>
+</span><span id="ValidationResult-51"><a href="#ValidationResult-51"><span class="linenos">51</span></a><span class="k">class</span> <span class="nc">ValidationResult</span><span class="p">:</span>
+</span><span id="ValidationResult-52"><a href="#ValidationResult-52"><span class="linenos">52</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of a validation operation.&quot;&quot;&quot;</span>
+</span><span id="ValidationResult-53"><a href="#ValidationResult-53"><span class="linenos">53</span></a>    <span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span id="ValidationResult-54"><a href="#ValidationResult-54"><span class="linenos">54</span></a>    <span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ValidationErrorObject</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -501,7 +634,7 @@
                             <div id="ValidationResult.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">ValidationResult</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span>, </span><span class="param"><span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></span>)</span>
+        <span class="name">ValidationResult</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span>, </span><span class="param"><span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n"><a href="#ValidationErrorObject">ValidationErrorObject</a></span><span class="p">]</span></span>)</span>
 
         
     </div>
@@ -523,7 +656,7 @@
                             </div>
                             <div id="ValidationResult.errors" class="classattr">
                                 <div class="attr variable">
-            <span class="name">errors</span><span class="annotation">: List[str]</span>
+            <span class="name">errors</span><span class="annotation">: List[<a href="#ValidationErrorObject">ValidationErrorObject</a>]</span>
 
         
     </div>
@@ -545,14 +678,14 @@
 
     </div>
     <a class="headerlink" href="#FieldDefinition"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldDefinition-39"><a href="#FieldDefinition-39"><span class="linenos">39</span></a><span class="nd">@dataclass</span>
-</span><span id="FieldDefinition-40"><a href="#FieldDefinition-40"><span class="linenos">40</span></a><span class="k">class</span> <span class="nc">FieldDefinition</span><span class="p">:</span>
-</span><span id="FieldDefinition-41"><a href="#FieldDefinition-41"><span class="linenos">41</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT field.&quot;&quot;&quot;</span>
-</span><span id="FieldDefinition-42"><a href="#FieldDefinition-42"><span class="linenos">42</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="FieldDefinition-43"><a href="#FieldDefinition-43"><span class="linenos">43</span></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="FieldDefinition-44"><a href="#FieldDefinition-44"><span class="linenos">44</span></a>    <span class="n">min_len</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="FieldDefinition-45"><a href="#FieldDefinition-45"><span class="linenos">45</span></a>    <span class="n">max_len</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="FieldDefinition-46"><a href="#FieldDefinition-46"><span class="linenos">46</span></a>    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># &#39;a&#39;, &#39;n&#39;, &#39;d&#39;, &#39;g&#39;, &#39;z&#39;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldDefinition-56"><a href="#FieldDefinition-56"><span class="linenos">56</span></a><span class="nd">@dataclass</span>
+</span><span id="FieldDefinition-57"><a href="#FieldDefinition-57"><span class="linenos">57</span></a><span class="k">class</span> <span class="nc">FieldDefinition</span><span class="p">:</span>
+</span><span id="FieldDefinition-58"><a href="#FieldDefinition-58"><span class="linenos">58</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT field.&quot;&quot;&quot;</span>
+</span><span id="FieldDefinition-59"><a href="#FieldDefinition-59"><span class="linenos">59</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="FieldDefinition-60"><a href="#FieldDefinition-60"><span class="linenos">60</span></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="FieldDefinition-61"><a href="#FieldDefinition-61"><span class="linenos">61</span></a>    <span class="n">min_len</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="FieldDefinition-62"><a href="#FieldDefinition-62"><span class="linenos">62</span></a>    <span class="n">max_len</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="FieldDefinition-63"><a href="#FieldDefinition-63"><span class="linenos">63</span></a>    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># &#39;a&#39;, &#39;n&#39;, &#39;d&#39;, &#39;g&#39;, &#39;z&#39;</span>
 </span></pre></div>
 
 
@@ -640,12 +773,12 @@
 
     </div>
     <a class="headerlink" href="#SentenceDefinition"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SentenceDefinition-48"><a href="#SentenceDefinition-48"><span class="linenos">48</span></a><span class="nd">@dataclass</span>
-</span><span id="SentenceDefinition-49"><a href="#SentenceDefinition-49"><span class="linenos">49</span></a><span class="k">class</span> <span class="nc">SentenceDefinition</span><span class="p">:</span>
-</span><span id="SentenceDefinition-50"><a href="#SentenceDefinition-50"><span class="linenos">50</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT sentence structure.&quot;&quot;&quot;</span>
-</span><span id="SentenceDefinition-51"><a href="#SentenceDefinition-51"><span class="linenos">51</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="SentenceDefinition-52"><a href="#SentenceDefinition-52"><span class="linenos">52</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="SentenceDefinition-53"><a href="#SentenceDefinition-53"><span class="linenos">53</span></a>    <span class="n">structure</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SentenceDefinition-65"><a href="#SentenceDefinition-65"><span class="linenos">65</span></a><span class="nd">@dataclass</span>
+</span><span id="SentenceDefinition-66"><a href="#SentenceDefinition-66"><span class="linenos">66</span></a><span class="k">class</span> <span class="nc">SentenceDefinition</span><span class="p">:</span>
+</span><span id="SentenceDefinition-67"><a href="#SentenceDefinition-67"><span class="linenos">67</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Definition of a KVDT sentence structure.&quot;&quot;&quot;</span>
+</span><span id="SentenceDefinition-68"><a href="#SentenceDefinition-68"><span class="linenos">68</span></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="SentenceDefinition-69"><a href="#SentenceDefinition-69"><span class="linenos">69</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="SentenceDefinition-70"><a href="#SentenceDefinition-70"><span class="linenos">70</span></a>    <span class="n">structure</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
 </span></pre></div>
 
 
@@ -711,13 +844,13 @@
 
     </div>
     <a class="headerlink" href="#FieldReference"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldReference-55"><a href="#FieldReference-55"><span class="linenos">55</span></a><span class="nd">@dataclass</span>
-</span><span id="FieldReference-56"><a href="#FieldReference-56"><span class="linenos">56</span></a><span class="k">class</span> <span class="nc">FieldReference</span><span class="p">:</span>
-</span><span id="FieldReference-57"><a href="#FieldReference-57"><span class="linenos">57</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a field within a sentence structure.&quot;&quot;&quot;</span>
-</span><span id="FieldReference-58"><a href="#FieldReference-58"><span class="linenos">58</span></a>    <span class="n">field_id</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="FieldReference-59"><a href="#FieldReference-59"><span class="linenos">59</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span> <span class="c1"># True = &#39;m&#39;, False = &#39;k&#39;</span>
-</span><span id="FieldReference-60"><a href="#FieldReference-60"><span class="linenos">60</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># -1 for unlimited</span>
-</span><span id="FieldReference-61"><a href="#FieldReference-61"><span class="linenos">61</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldReference-72"><a href="#FieldReference-72"><span class="linenos">72</span></a><span class="nd">@dataclass</span>
+</span><span id="FieldReference-73"><a href="#FieldReference-73"><span class="linenos">73</span></a><span class="k">class</span> <span class="nc">FieldReference</span><span class="p">:</span>
+</span><span id="FieldReference-74"><a href="#FieldReference-74"><span class="linenos">74</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a field within a sentence structure.&quot;&quot;&quot;</span>
+</span><span id="FieldReference-75"><a href="#FieldReference-75"><span class="linenos">75</span></a>    <span class="n">field_id</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="FieldReference-76"><a href="#FieldReference-76"><span class="linenos">76</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span> <span class="c1"># True = &#39;m&#39;, False = &#39;k&#39;</span>
+</span><span id="FieldReference-77"><a href="#FieldReference-77"><span class="linenos">77</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="c1"># -1 for unlimited</span>
+</span><span id="FieldReference-78"><a href="#FieldReference-78"><span class="linenos">78</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -794,13 +927,13 @@
 
     </div>
     <a class="headerlink" href="#GroupReference"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GroupReference-63"><a href="#GroupReference-63"><span class="linenos">63</span></a><span class="nd">@dataclass</span>
-</span><span id="GroupReference-64"><a href="#GroupReference-64"><span class="linenos">64</span></a><span class="k">class</span> <span class="nc">GroupReference</span><span class="p">:</span>
-</span><span id="GroupReference-65"><a href="#GroupReference-65"><span class="linenos">65</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a group of fields within a sentence structure.&quot;&quot;&quot;</span>
-</span><span id="GroupReference-66"><a href="#GroupReference-66"><span class="linenos">66</span></a>    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
-</span><span id="GroupReference-67"><a href="#GroupReference-67"><span class="linenos">67</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="GroupReference-68"><a href="#GroupReference-68"><span class="linenos">68</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="GroupReference-69"><a href="#GroupReference-69"><span class="linenos">69</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GroupReference-80"><a href="#GroupReference-80"><span class="linenos">80</span></a><span class="nd">@dataclass</span>
+</span><span id="GroupReference-81"><a href="#GroupReference-81"><span class="linenos">81</span></a><span class="k">class</span> <span class="nc">GroupReference</span><span class="p">:</span>
+</span><span id="GroupReference-82"><a href="#GroupReference-82"><span class="linenos">82</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to a group of fields within a sentence structure.&quot;&quot;&quot;</span>
+</span><span id="GroupReference-83"><a href="#GroupReference-83"><span class="linenos">83</span></a>    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;FieldReference&#39;</span><span class="p">,</span> <span class="s1">&#39;GroupReference&#39;</span><span class="p">]]</span>
+</span><span id="GroupReference-84"><a href="#GroupReference-84"><span class="linenos">84</span></a>    <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span id="GroupReference-85"><a href="#GroupReference-85"><span class="linenos">85</span></a>    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="GroupReference-86"><a href="#GroupReference-86"><span class="linenos">86</span></a>    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </span></pre></div>
 
 

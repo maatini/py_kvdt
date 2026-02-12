@@ -53,27 +53,78 @@ python3 -m src.pykvdt <path_to_file>
 ```
 
 ```python
-from src.pykvdt.reader import Reader
-from src.pykvdt.parser import Parser
+from pykvdt.reader import Reader
+from pykvdt.parser import Parser
 
+# 1. Initialize Reader and Parser
 reader = Reader("path/to/file.con")
 parser = Parser()
 
+# 2. Iterate over sentences
 for satz in reader:
+    # 3. Validate each sentence
     result = parser.validate_sentence(satz)
+    
     if not result.valid:
-        print(result.errors)
+        print(f"Validation failed for {satz.type}:")
+        for error in result.errors:
+            # Structured error information
+            print(f"  - Line {error.line_nbr}: {error.message} (Field: {error.field_id})")
+    else:
+        print(f"Sentence {satz.type} is valid!")
+```
+
+### Detailed CLI Usage
+The CLI provides a quick way to validate any KVDT file:
+
+```bash
+# Basic validation
+python3 -m pykvdt.parser path/to/file.con
+
+# Using the included script for bulk generation and validation
+PYTHONPATH=src python3 scripts/generate_test_data.py --count 5 --outdir ./output
+```
+
+### Advanced Error Handling
+The library uses a structured exception and error reporting system. Instead of simple strings, you get `ValidationErrorObject` instances containing:
+
+- **`message`**: Human-readable error description.
+- **`field_id`**: The 4-digit KVDT field ID.
+- **`line_nbr`**: The exact line number in the source file.
+- **`satz_type`**: The sentence type context (e.g., '0101').
+
+```python
+from pykvdt.exceptions import KVDTReaderError
+
+try:
+    reader = Reader("corrupt_file.con")
+    sentences = list(reader)
+except KVDTReaderError as e:
+    print(f"Critical file structure error at line {e.line_nbr}: {e}")
 ```
 
 ### Test Data Generation
 Generate valid KVDT test packages with realistic data:
 
 ```bash
-# Generate 10 files with 10-150 cases each
-PYTHONPATH=. python3 scripts/generate_test_data.py --count 10 --outdir ./test_data --min-cases 5 --max-cases 145
+# Generate 10 files with 5-145 cases each
+PYTHONPATH=src python3 scripts/generate_test_data.py --count 10 --outdir ./test_data --min-cases 5 --max-cases 145
 ```
 
-The generator produces consistent BSNR/LANR values, realistic German names, valid EBM 2025 constants, and compliant ICD-10 codes.
+The generator produces high-quality test data including:
+- **BSNR/LANR**: Consistent and valid physician/facility identifiers.
+- **Clinical Data**: Realistic EBM 2025 GOPs (e.g., `03000`, `01700`) and ICD-10 codes (e.g., `J06.9`, `I10`).
+- **Patient Data**: Realistic German names, addresses, and eGK insurance numbers.
+
+**Programmatic Generation:**
+```python
+from pykvdt.generator import Generator
+
+gen = Generator()
+# Generate a single valid 'ADT' sentence
+satz = gen.generate_sentence("adt0")
+print(satz.to_bytes().decode('iso-8859-15'))
+```
 
 ## Testing & Coverage
 
@@ -95,6 +146,16 @@ python3 -m coverage html
 ```
 
 Currently, the project maintains **>95% code coverage**.
+
+## API Documentation
+Interactive HTML documentation is available and can be generated using `pdoc`:
+
+```bash
+devbox run docs
+# or
+pdoc --output-dir docs src/pykvdt
+```
+The documentation includes detailed type information for all classes and methods.
 
 ## Legacy Code
 The original 2014 implementation is available in the `legacy/` directory.

@@ -3,14 +3,34 @@ from .model import Token, Satz
 from .exceptions import KVDTReaderError
 
 class Reader:
-    """Reads a KVDT file and yields Sentences (lists of tokens)."""
+    """
+    Reads a KVDT file and yields parsed sentences as `Satz` objects.
+    
+    The reader handles the binary-to-text conversion (ISO-8859-15) and 
+    splits the field stream into logical sentences based on the '8000' field.
+    """
 
     def __init__(self, filename: str, encoding: str = "ISO-8859-15"):
+        """
+        Initializes the Reader.
+        
+        Args:
+            filename: Path to the KVDT (.con) file.
+            encoding: Text encoding (default: ISO-8859-15).
+        """
         self.filename = filename
         self.encoding = encoding
 
     def __iter__(self) -> typing.Iterator[Satz]:
-        """Yields Satz objects from the file."""
+        """
+        Iterates over the file and yields `Satz` objects.
+        
+        Yields:
+            Satz: A parsed KVDT sentence containing tokens.
+            
+        Raises:
+            KVDTReaderError: If a line is malformed or too short.
+        """
         with open(self.filename, 'r', encoding=self.encoding) as f:
             current_tokens: typing.List[Token] = []
             

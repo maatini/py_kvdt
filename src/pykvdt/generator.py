@@ -9,14 +9,37 @@ from .structures import SENTENCE_TYPES
 from .generator_context import GeneratorContext
 
 class Generator:
+    """
+    A generator for valid KVDT data.
+    
+    This class can generate both full KVDT messages and individual 
+    sentence types (Satzart). It uses a `GeneratorContext` to provide 
+    realistic data for names, addresses, and clinical codes.
+    """
     def __init__(self, context: Optional[GeneratorContext] = None):
+        """
+        Initializes the Generator.
+        
+        Args:
+            context: An optional GeneratorContext for realistic data providers.
+        """
         self.sentence_type = ""
         self.context = context or GeneratorContext()
 
     def generate_kvdt_file(self, min_cases: int = 5, max_cases: int = 10) -> List[Satz]:
         """
         Generates a full KVDT file structure (Arztpakete).
-        Sequence: con0 -> besa -> adt0 -> cases -> adt9 -> con9
+        
+        The generated sequence follows the standard: 
+        `con0` (Container Header) -> `besa` (BSNR/LANR) -> `adt0` (ADT Header) 
+        -> N x Case sentences -> `adt9` (ADT Footer) -> `con9` (Container Footer).
+        
+        Args:
+            min_cases: Minimum number of case records (e.g. 0101) to generate.
+            max_cases: Maximum number of case records to generate.
+            
+        Returns:
+            A list of Satz objects representing a complete KVDT file.
         """
         sentences = []
         
@@ -57,7 +80,16 @@ class Generator:
 
     def generate_sentence(self, satzart_id: str) -> Satz:
         """
-        Generates a valid Satz object with random data for the given sentence type ID.
+        Generates a single valid Satz for the given sentence type ID.
+        
+        Args:
+            satzart_id: The 4-digit ID of the sentence type (e.g., '0101', 'adt0').
+            
+        Returns:
+            A generated Satz object with realistic field values.
+            
+        Raises:
+            ValueError: If the sentence type ID is unknown.
         """
         if satzart_id not in SENTENCE_TYPES:
             raise ValueError(f"Unknown sentence type: {satzart_id}")

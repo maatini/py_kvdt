@@ -5,10 +5,25 @@ from .structures import SENTENCE_TYPES
 from .validators import Validator
 
 class Parser:
+    """
+    A recursive descent parser for KVDT files.
+    
+    The parser uses a table-driven approach, matching tokens against 
+    sentence structures defined in `structures.py` and `definitions.py`.
+    """
     def __init__(self):
         pass
 
     def validate_sentence(self, satz: Satz) -> ValidationResult:
+        """
+        Validates a single KVDT sentence against its defined structure.
+        
+        Args:
+            satz: The Satz object to validate.
+            
+        Returns:
+            A ValidationResult containing the validation status and any errors found.
+        """
         if satz.type not in SENTENCE_TYPES:
              return ValidationResult(False, [ValidationErrorObject(f"Unknown sentence type: {satz.type}", satz_type=satz.type)])
         
@@ -34,14 +49,22 @@ class Parser:
         return ValidationResult(len(self.errors) == 0, self.errors)
 
     def _current_token(self) -> Optional[Token]:
+        """Returns the token at the current position without advancing."""
         if self.pos < len(self.tokens):
             return self.tokens[self.pos]
         return None
 
     def _advance(self):
+        """Advances the current position by one."""
         self.pos += 1
 
     def _match_structure(self, structure: List[Union[FieldReference, GroupReference]]):
+        """
+        Recursively matches a list of field or group references.
+        
+        Args:
+            structure: A list of FieldReference or GroupReference objects.
+        """
         for item in structure:
             if isinstance(item, FieldReference):
                 self._match_field(item)
